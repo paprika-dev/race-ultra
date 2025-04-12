@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="planner.js"></script>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Trail Race Planner</title>
+</head>
+<body>
+    <main>
+        <div class="progress">
+            <div class="progress-bar"></div>
+        </div>
+        <div class="metrics">
+            <div class="metric-grid">
+                <div class="metric"><p class="metric-name">Target Finish Hours</p><p class="metric-figure">08:45</p></div>
+                <div class="metric"><p class="metric-name">Projected Finish Hours</p><p class="metric-figure">09:00</p></div>
+                <div class="metric"><p class="metric-name">Race Time Passed</p><p class="metric-figure">06:15 <i class="bi bi-hourglass-split"></i></p></div>
+                <div class="metric"><p class="metric-name">Buffer / Gap</p><p class="metric-figure buffer-gap">15 min</p></div> 
+                <div class="race-plan metric">
+                    <div><p class="metric-name">Race Plan</p><p class="metric-figure buffer-gap">PUSH</p></div>
+                    <div class="EPH-comparison">
+                        <p class="EPH"><i class="bi bi-circle-fill"></i> Last Split 9.52</p>
+                        <p class="EPH"><i class="bi bi-circle"></i> Target Avg 8.52</p>
+                        <p class="EPH"><i class="bi bi-circle"></i> Projected Avg 8.32</p>
+                    </div> 
+                </div>
+
+            </div>
+        </div>
+        <div class="checkpoints">
+            <!-- current cp -->
+            <article class="checkpoint current-cp">
+                <div class="cp-header">
+                    <div class="cp-header-left">
+                        <i class="bi bi-crosshair2"></i>
+                        <p class="cp-name">CP3: Mui Wo</p>
+                    </div>
+                    <div class="cp-header-right">
+                        <p class="cp-info">17 EP | 12 km | +500 m</p>
+                    </div>
+                </div>
+                <hr class="cp-divider">
+                <div class="cp-content">
+                    <div class="cp-metric-flexbox">
+                        <div class="cp-metric"><p class="cp-metric-name">Target Arrival</p><p class="cp-metric-figure">11:45</p></div>
+                        <div class="cp-metric"><p class="cp-metric-name">Actual Arrival</p><p class="cp-metric-figure">12:23</p></div>
+                        <div class="cp-metric"><p class="cp-metric-name">Buffer / Gap</p><p class="cp-metric-figure buffer-gap">+3 min</p></div> 
+                        <div class="cp-metric"><p class="cp-metric-name">Split EPH</p><p class="cp-metric-figure">9.51</p></div>
+                    </div>
+                </div>
+            </article>
+            <!-- next cp -->
+            <article class="checkpoint next-cp">
+                <div class="cp-header">
+                    <div class="cp-header-left">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <p class="cp-name">CP4: Pui O</p>
+                    </div>
+                    <div class="cp-header-right">
+                        <p class="cp-info">17 EP | 12 km | +500 m</p>
+                    </div>
+                </div>
+                <hr class="cp-divider">
+                <div class="cp-content">
+                    <div class="cp-metric-flexbox">
+                        <div class="cp-metric"><p class="cp-metric-name">Target Arrival</p><p class="cp-metric-figure">11:45</p></div>
+                        <div class="cp-metric"><p class="cp-metric-name">Projected Arrival</p><p class="cp-metric-figure">12:23</p></div>
+                        <div class="cp-metric"><p class="cp-metric-name">Buffer / Gap</p><p class="cp-metric-figure buffer-gap">-</p></div> 
+                        <div class="cp-metric"><p class="cp-metric-name">Split EPH</p><p class="cp-metric-figure">-</p></div>
+                    </div>
+                </div>
+            </article>
+            <button class="arrival-btn">
+                arrived at CP4: Pui O
+            </button>
+            
+        </div>
+    </main>
+</body>
+</html>
