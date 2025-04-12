@@ -3,8 +3,7 @@
     "name": "Trail Race Planner",
     "short_name": "Race Ultra",
     "description": "trail planner app",
-    <link rel="manifest" href="pwa.webmanifest" />
-    "start_url": "/index.html",
+    "start_url": "/race-ultra/index.html",
     "icons": [
         {
           "src": "images/icon.png",
