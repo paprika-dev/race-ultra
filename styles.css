@@ -74,6 +74,9 @@ main {
     border-radius: var(--border-radius);
     padding: 0.85rem;
     transition: transform 0.2s;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: space-between; */
 }
 
 .metric:active {
@@ -82,12 +85,13 @@ main {
 
 .metric-name {
     font-size: 0.8rem;
+    margin-top: 0.2rem;
 }
 
 .metric-figure {
     font-size: 1.5rem;
     font-weight: 600;
-    margin-top: 0.5rem;
+    margin-top: 0.8rem;
 }
 
 .buffer-gap {
@@ -95,25 +99,19 @@ main {
     /* color: var(--primary); */
 }
 
-.metric > .metric-name {
-    margin-top: 0.2rem;
-}
-
 .metric > .buffer-gap {
     font-weight: 900;
 }
 
-.race-plan {
-    grid-column: span 2;
+.EPH-comparison {
     display: flex;
-    gap: 1.2rem;
     align-items: center;
 }
 
-.EPH-comparison {
+.EPH {
     display: grid;
-    grid-template-columns: auto auto;
-    gap: 0.3rem;
+    grid-template-columns: auto auto auto;
+    gap: 0.3rem 0.5rem;
     font-size: 0.7rem;
     font-family: monospace;
 }
