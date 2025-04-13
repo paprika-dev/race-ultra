@@ -128,12 +128,15 @@ main {
     padding: 1rem;
     transition: transform 0.2s;
     border-radius: var(--border-radius);
-    margin-bottom: 1rem;
 }
 
 .current-cp {
     transform: scale(0.88);
     margin-bottom: 0.5rem;
+}
+
+.next-cp {
+    margin-bottom: 1rem;
 }
 
 .current-cp:active {
