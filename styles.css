@@ -56,7 +56,7 @@ main {
     background-color: var(--metric-bg);
     padding: 1rem;
     border-radius: var(--border-radius);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .metric-grid {
@@ -99,7 +99,7 @@ main {
     grid-column: span 2;
     display: flex;
     gap: 1.5rem;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .EPH {
