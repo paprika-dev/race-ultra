@@ -12,5 +12,9 @@ function addCheckpoint(){
 
 }
 
+function addRecceSplit(){
+
+}
+
 document.addEventListener("touchstart", function(){}, true);
 // tetsing
