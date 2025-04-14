@@ -11,6 +11,21 @@
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
   }
 
+/* view switch */
+.view {
+    display: none;
+}
+
+.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
 .trivial {
     color: var(--trivial);
 }
@@ -23,16 +38,51 @@ i {
     color: var(--primary);
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     padding-top: var(--safe-area-inset-top);
     padding-bottom: var(--safe-area-inset-bottom);
     font-family: sans-serif;
+    height: 100vh;
+    margin: 0;
+    /* border: 1px solid black; */
+    max-width: 30rem;
+}
+
+nav {
+    position: fixed;
+    bottom: var(--safe-area-inset-bottom);
+    display: flex;
+    justify-content: space-around;
+    padding-top: 0.5rem;
+    padding-bottom: 0.8rem;
+    /* border: 1px solid black; */
+    width: 100%;
+    max-width: 30rem;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.09);
+}
+
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item > button {
+    border: none;
+    background: transparent;
+    font-size: 1.3rem;
+}
+
+.nav-item > label {
+    font-size: 0.85rem;
 }
 
 main {
     padding: 1rem;
-    max-width: 30rem;
-    /* margin: auto; */
 }
 
 .progress {
@@ -190,6 +240,7 @@ main {
     background-color: var(--primary);
     border: none;
     color: white;
+    font-size: 1rem;
     font-weight: 900;
     border-radius: var(--border-radius);
     padding: 0.7rem 1rem;
