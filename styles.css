@@ -9,6 +9,7 @@
     --border-radius: 12px;
     --safe-area-inset-top: env(safe-area-inset-top);
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    --max-width: 30rem;
   }
 
 button {
@@ -59,7 +60,7 @@ body {
     font-family: sans-serif;
     height: 100vh;
     margin: 0;
-    max-width: 30rem;
+    max-width: var(--max-width);
     background: white;
 }
 
@@ -91,7 +92,7 @@ nav {
     background: white;
     height: 10vh;
     width: 100%;
-    max-width: 30rem;
+    max-width: var(--max-width);
     box-shadow: 0 -2px 6px rgba(0,0,0,0.09);
 }
 
@@ -157,7 +158,7 @@ main {
     gap: 0.8rem;
 }
 
-.metric {
+.metric, .modal-trigger {
     background: white;
     border-radius: var(--border-radius);
     padding: 0.85rem;
@@ -287,11 +288,15 @@ main {
     box-shadow: 0 2px 8px rgba(0,0,0,0.09);
 }
 
-.cpinput {
+.cpinput, .modal-triggers {
     background-color: var(--metric-bg);
     padding: 1rem;
     border-radius: var(--border-radius);
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
+}
+
+.modal-trigger {
+    background-color: white;
 }
 
 .input-btn, .remove-btn {
@@ -319,4 +324,12 @@ label[for="race-start"] {
 
 .input-btn i, .remove-btn i {
     color: white;
+}
+
+.modal {
+    max-width: var(--max-width);
+}
+
+.modal form {
+    padding: 2rem;
 }

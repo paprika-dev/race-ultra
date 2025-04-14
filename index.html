@@ -21,36 +21,90 @@
                 <label for="race-start" class="text-nowrap"><i class="bi bi-flag-fill"></i>&emsp13; Race Start</label>
                 <input id="race-start" class="form-control" type="time" value="10:00" name="racestart">
             </form>
+
             <!-- add checkpoints -->
-            <form class="cpinput mb-3">
-                <input class="form-control mb-2" type="text" name="cpname" placeholder="Checkpoint Name">
-                <div class="row gx-2 mb-3">
-                    <div class="col">
-                        <input class="form-control" type="number" name="cpdistance" placeholder="Distance (km)">
-                    </div>
-                    <div class="col">
-                        <input class="form-control" type="number" name="cpelevgain" placeholder="Elevation Gain (m)">
+            <div class="modal fade" id="addcpModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered p-3">
+                    <div class="modal-content">
+                        <form class="cpinput" id="form-add-cp">
+                            <input class="form-control mb-2" type="text" name="cpname" placeholder="Checkpoint Name">
+                            <div class="row gx-2 mb-3">
+                                <div class="col">
+                                    <input class="form-control" type="number" name="cpdistance" placeholder="Distance (km)">
+                                </div>
+                                <div class="col">
+                                    <input class="form-control" type="number" name="cpelevgain" placeholder="Elevation Gain (m)">
+                                </div>
+                            </div>
+                            <button class="input-btn py-2 px-3"><i class="bi bi-geo-fill"></i> Add Checkpoint</button>
+                        </form>
                     </div>
                 </div>
-                <button class="input-btn py-2 px-3" onclick="addCheckpoint()"><i class="bi bi-geo-fill"></i> Add Checkpoint</button>
-            </form>
+            </div>
+            
             <!-- add recce split -->
-            <form class="cpinput mb-3">
-                <div class="row gx-2 mb-3">
-                    <div class="col-7">
-                        <select class="form-select" aria-label="select split">
-                            <option selected>Select Split</option>
-                            <option value="1">CP1: Mui Wo</option>
-                            <option value="2">CP2: Pui 0</option>
-                            <option value="3">Finish: Mui Wo</option>
-                        </select>
-                    </div>
-                    <div class="col-5">
-                        <input class="form-control" type="text" name="splitPR" placeholder="hh:mm">
+            <div class="modal fade" id="recceSplitModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered p-3">
+                    <div class="modal-content">
+                        <form class="cpinput">
+                            <div class="row gx-2 mb-3">
+                                <div class="col-7">
+                                    <select class="form-select" aria-label="select split">
+                                        <option selected>Select Split</option>
+                                        <option value="1">CP1: Mui Wo</option>
+                                        <option value="2">CP2: Pui 0</option>
+                                        <option value="3">Finish: Mui Wo</option>
+                                    </select>
+                                </div>
+                                <div class="col-5">
+                                    <input class="form-control" type="text" name="splitPR" placeholder="hh:mm">
+                                </div>
+                            </div>
+                            <button class="input-btn py-2 px-3"><i class="bi bi-stopwatch-fill"></i> Add Recee Split Time</button>
+                        </form>
                     </div>
                 </div>
-                <button class="input-btn py-2 px-3" onclick="addRecceSplit()"><i class="bi bi-stopwatch-fill"></i> Add Recee Split Time</button>
-            </form>
+            </div>
+            
+            <!-- checkpoint removal -->
+            <div class="modal fade" id="removalModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered p-3">
+                    <div class="modal-content">
+                        <form class="cpinput mb-3">
+                            <div class="row gx-2">
+                                <div class="col-6">
+                                    <select class="form-select" aria-label="select checkpoint">
+                                        <option selected>Select Checkpoint</option>
+                                        <option value="1">CP1: Mui Wo</option>
+                                        <option value="2">CP2: Pui 0</option>
+                                        <option value="3">Finish: Mui Wo</option>
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <button class="remove-btn py-2 px-1" onclick="removeCP()"><i class="bi bi-eraser-fill"></i> Remove</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="remove-btn py-2 px-1" onclick="resetAll()"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- modal triggerers -->
+            <div class="row gx-2 modal-triggers">
+                <button class="col modal-trigger py-2 px-3" data-bs-toggle="modal" data-bs-target="#addcpModal">
+                    <i class="bi bi-geo-fill"></i><br>Add CP
+                </button>
+                <button class="col modal-trigger py-2 px-3" data-bs-toggle="modal" data-bs-target="#removalModal">
+                    <i class="bi bi-eraser-fill"></i><br>Remove CP
+                </button>
+                <button class="col modal-trigger py-2 px-3" data-bs-toggle="modal" data-bs-target="#recceSplitModal">
+                    <i class="bi bi-stopwatch-fill"></i><br>Record Recee Split
+                </button>
+            </div>
+            
             <!-- checkpoint table -->
             <table class="table">
                 <thead>
@@ -61,8 +115,8 @@
                         <th>+Elev<br>&#40;m&#41;</th>
                         <th>EP</th>
                         <th>EP%</th>
+                        <th>Target<br>Effort%</th>
                         <th>Recce<br>Split</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -95,25 +149,10 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- checkpoint removal -->
-            <form class="cpinput mb-3">
-                <div class="row gx-2">
-                    <div class="col-6">
-                        <select class="form-select" aria-label="select checkpoint">
-                            <option selected>Select Checkpoint</option>
-                            <option value="1">CP1: Mui Wo</option>
-                            <option value="2">CP2: Pui 0</option>
-                            <option value="3">Finish: Mui Wo</option>
-                        </select>
-                    </div>
-                    <div class="col-3">
-                        <button class="remove-btn py-2 px-1" onclick="removeCP()"><i class="bi bi-eraser-fill"></i> Remove</button>
-                    </div>
-                    <div class="col-3">
-                        <button class="remove-btn py-2 px-1" onclick="resetAll()"><i class="bi bi-arrow-clockwise"></i> Reset</button>
-                    </div>
-                </div>
-            </form>
+
+           
+            
+            
         </div>
         <!-- in-race tracker -->
         <div id="race-tracker" class="view">

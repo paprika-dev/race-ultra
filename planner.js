@@ -8,9 +8,13 @@ function showView(viewId, btn) {
     navitems[btn].classList.add('selected');
   }
 
-function addCheckpoint(){
+const form = document.getElementById('form-add-cp');
 
-}
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('submitted')
+})
+
 
 function addRecceSplit(){
 
