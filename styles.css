@@ -247,8 +247,9 @@ main {
 }
 
 .cp-divider {
-    border-top: 1px solid var(--trivial);
-    margin-bottom: 1rem;
+    border-top: 1px solid var(--trivial) !important;
+    margin-top: 0.3rem !important; 
+    margin-bottom: 1rem !important;
 }
 
 .cp-metric-flexbox {
