@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0maximum-scale=1.0, user-scalable=no"">
     <script defer src="planner.js"></script>
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="stylesheet" href="styles.css">
@@ -108,15 +108,15 @@
     </main>
     <nav>
         <div class="nav-item">
-            <button id="btn-1" onclick="showView('race-details')"><i class="bi bi-pencil-square"></i></button>
+            <button id="btn-1" onclick="showView('race-details', 0)"><i class="bi bi-pencil-square trivial"></i></button>
             <label for="btn-1" class="nav-item-name trivial">input</label>
         </div>
         <div class="nav-item">
-            <button id="btn-2" onclick="showView('race-tracker')"><i class="bi bi-watch"></i></button>
+            <button id="btn-2" onclick="showView('race-tracker', 1)"><i class="bi bi-watch trivial"></i></button>
             <label for="btn-2" class="nav-item-name trivial">tracker</label>
         </div>
         <div class="nav-item">
-            <button id="btn-3" onclick="showView('race-summary')"><i class="bi bi-clipboard-data"></i></button>
+            <button id="btn-3" onclick="showView('race-summary', 2)"><i class="bi bi-clipboard-data trivial"></i></button>
             <label for="btn-3" class="nav-item-name trivial">summary</label>
         </div>
     </nav>
