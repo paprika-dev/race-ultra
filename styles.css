@@ -26,7 +26,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-/* testing */
 
 .trivial {
     color: var(--trivial);
@@ -42,9 +41,11 @@ i {
 
 * {
     box-sizing: border-box;
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -53,7 +54,6 @@ body {
     font-family: sans-serif;
     height: 100vh;
     margin: 0;
-    /* border: 1px solid black; */
     max-width: 30rem;
     background: white;
 }
@@ -63,7 +63,7 @@ nav {
     bottom: var(--safe-area-inset-bottom);
     display: flex;
     justify-content: space-around;
-    padding-top: 0.5rem;
+    padding-top: 0.3rem;
     padding-bottom: 1.3rem;
     background: white;
     height: 10vh;
@@ -147,7 +147,7 @@ main {
 }
 
 .metric:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
     touch-action: manipulation;
 }
 
@@ -202,15 +202,15 @@ main {
 }
 
 .next-cp {
-    margin-bottom: 1rem;
+    margin-bottom: 0.85rem;
 }
 
 .current-cp:active {
-    transform: scale(0.86);
+    transform: scale(0.83);
   }
 
 .next-cp:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
   }
 
 .cp-header {
