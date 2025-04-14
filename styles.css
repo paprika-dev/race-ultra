@@ -50,6 +50,7 @@ body {
     margin: 0;
     /* border: 1px solid black; */
     max-width: 30rem;
+    background: white;
 }
 
 nav {
@@ -58,8 +59,8 @@ nav {
     display: flex;
     justify-content: space-around;
     padding-top: 0.5rem;
-    padding-bottom: 0.8rem;
-    /* border: 1px solid black; */
+    padding-bottom: 1.3rem;
+    background: white;
     width: 100%;
     max-width: 30rem;
     box-shadow: 0 -2px 6px rgba(0,0,0,0.09);
@@ -83,6 +84,8 @@ nav {
 
 main {
     padding: 1rem;
+    height: 40vh;
+    overflow: scroll;
 }
 
 .progress {
