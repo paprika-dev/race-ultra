@@ -11,6 +11,11 @@
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
   }
 
+button {
+    border: none;
+    background: transparent;
+}
+
 /* view switch */
 .view {
     display: none;
@@ -58,6 +63,24 @@ body {
     background: white;
 }
 
+table {
+    font-size: 0.8rem;
+}
+
+/* table, td, th {  
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 0.5rem;
+} */
+
 nav {
     position: fixed;
     bottom: var(--safe-area-inset-bottom);
@@ -81,8 +104,6 @@ nav {
 }
 
 .nav-item > button {
-    border: none;
-    background: transparent;
     font-size: 1.3rem;
 }
 
@@ -102,7 +123,7 @@ main {
     overflow: scroll;
 }
 
-.progress {
+.myprogress {
     height: 1rem;
     background-color: #36bc9d22;
     width: 100%;
@@ -111,7 +132,7 @@ main {
     display: flex;
 }
 
-.progress-bar {
+.myprogress-bar {
     height: 100%;
     width: 25%;
     background-color: var(--primary);
@@ -263,5 +284,26 @@ main {
     border-radius: var(--border-radius);
     padding: 0.7rem 1rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.09);
-    height: 2.5rem;
+}
+
+.cpinput {
+    background-color: var(--metric-bg);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+.addcp-btn {
+    background-color: var(--primary);
+    border: none;
+    color: white;
+    font-size: 1rem;
+    font-weight: 900;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+    width: 100%;
+}
+
+.addcp-btn i {
+    color: white;
 }

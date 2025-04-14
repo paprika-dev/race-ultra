@@ -8,5 +8,9 @@ function showView(viewId, btn) {
     navitems[btn].classList.add('selected');
   }
 
+function addCheckpoint(){
+
+}
+
 document.addEventListener("touchstart", function(){}, true);
 // tetsing
