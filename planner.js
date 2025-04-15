@@ -19,17 +19,143 @@ function showForm(formId, btn) {
 }
 
 
-const form = document.getElementById('form-addcp');
-
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    console.log('submitted')
-})
+function displayfigure(x) {
+    return Number.parseFloat(x).toFixed(2);
+}
 
 
 function addRecceSplit(){
 
 }
 
+
 document.addEventListener("touchstart", function(){}, true);
-// tetsing
+
+
+const tb = document.getElementById('cptable-body');
+
+function clearTable() {
+    tb.innerHTML = '';
+}
+
+class Checkpoint {
+    constructor(name, dist, elev) {
+        this.name = name
+        this.dist = dist
+        this.elev = elev
+    }
+
+    EP() { return this.dist + this.elev * 0.01 }
+}
+
+class CheckpointManager {
+    constructor() {
+        this.checkpoints = [];
+    }
+
+    addCheckpoint(checkpoint) {
+        this.checkpoints.push(checkpoint);
+    }
+
+    calculateTotal() {
+        return this.checkpoints.reduce((total, checkpoint) => {
+            total.dist += checkpoint.dist;
+            total.elev += checkpoint.elev;
+            return total;
+        }, { dist: 0, elev: 0 });
+    }
+
+    render() {
+        clearTable();
+        const total = this.calculateTotal();
+
+        tb.insertRow().innerHTML = `<td>Start: ${this.checkpoints[0].name}</td>`+"<td>-</td>".repeat(9)
+
+        for (let i = 1; i < this.checkpoints.length; i++) {
+            const cp = this.checkpoints[i]
+            const prefix = ((i == this.checkpoints.length - 1) ? "Finish: " : `CP${i}: `)
+            tb.insertRow().innerHTML = 
+            `
+                <td>${prefix+cp.name}</td>
+                <td>${cp.dist}</td>
+                <td>${cp.elev}</td>
+                <td></td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            `
+        }
+
+        tb.insertRow().innerHTML = 
+            `
+                <td>Total</td>
+                <td>${total.dist}</td>
+                <td>${total.elev}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            `
+        console.log('updated the cp table')
+    }
+
+    save() {
+        localStorage.setItem("checkpoints", JSON.stringify(this.checkpoints));
+    }
+
+    clear() {
+        // this.checkpoints = []
+        localStorage.removeItem("checkpoints")
+    }
+}
+
+
+
+const cpmanager = new CheckpointManager();
+
+window.onload = (e) => {
+    const CPs = window.localStorage.getItem("checkpoints")
+    
+    if (CPs) {
+        cpmanager.checkpoints = JSON.parse(CPs)
+        cpmanager.render()
+    }
+
+}
+
+
+const formAddCP = document.getElementById('form-addcp');
+const formRemoveCP = document.getElementById('form-removecp');
+
+formAddCP.addEventListener('submit', (e) => {
+    e.preventDefault();
+    cp = new Checkpoint(
+        formAddCP.querySelector('input[name="cpname"]').value,
+        formAddCP.querySelector('input[name="cpdistance"]').valueAsNumber,
+        formAddCP.querySelector('input[name="cpelevgain"]').valueAsNumber
+    )
+    cpmanager.addCheckpoint(cp)
+    cpmanager.save()
+    cpmanager.render()
+    
+    formAddCP.reset();
+})
+
+formRemoveCP.addEventListener('submit', (e) => {
+    e.preventDefault();
+    cpmanager.clear()
+    cpmanager.render()
+})
+
+
+function createEmptyCPTable() {
+    document.createElement(
+
+    )
+}
