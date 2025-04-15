@@ -1,3 +1,11 @@
+document.addEventListener("touchstart", function(){}, true);
+
+function displayFigure(x, dp) {
+    return Number.parseFloat(x).toFixed(dp)
+}
+
+// UI show / hide
+
 function showView(viewId, btn) {
     const views = document.querySelectorAll('.view');
     views.forEach(view => view.classList.remove('active'));
@@ -18,19 +26,12 @@ function showForm(formId, btn) {
     formselections[btn].classList.add('selected');
 }
 
-
-
-document.addEventListener("touchstart", function(){}, true);
-
-function displayFigure(x, dp) {
-    return Number.parseFloat(x).toFixed(dp)
-}
+// Checkpoint Table
 
 const tb = document.getElementById('cptable-body');
-
-function clearTable() {
-    tb.innerHTML = '';
-}
+const formAddCP = document.getElementById('form-addcp');
+const formRemoveCP = document.getElementById('form-removecp');
+const splitSelections = document.getElementsByClassName('select-split')
 
 class Checkpoint {
     constructor(name, dist, elev) {
@@ -41,13 +42,27 @@ class Checkpoint {
     }
 }
 
-class CheckpointManager {
+class RacePlan {
     constructor() {
+        this.raceStart = "";
         this.checkpoints = [];
     }
 
     addCheckpoint(checkpoint) {
         this.checkpoints.push(checkpoint);
+    }
+
+    prefixedName(i) {
+        let prefix = ""
+        switch (i) { 
+            case 0: 
+                prefix = "Start: "; break;
+            case this.checkpoints.length - 1: 
+                prefix = "Finish: "; break;
+            default: 
+                prefix = "CP" + i + ": ";
+        }
+        return prefix + this.checkpoints[i].name
     }
 
     calculateTotal() {
@@ -59,18 +74,37 @@ class CheckpointManager {
         }, { dist: 0, elev: 0, EP: 0 });
     }
 
-    render() {
-        clearTable();
-        const total = this.calculateTotal();
+    updateSplitSelection() {
+        let options = "<option selected>Select Split</option>"
 
-        tb.insertRow().innerHTML = `<td>Start: ${this.checkpoints[0].name}</td>`+"<td>-</td>".repeat(9)
+        for (let i = 1; i < this.checkpoints.length; i++) {
+            options += `<option value="${i}">${this.prefixedName(i)}</option>`;
+        }
+
+        for (let i = 0; i < splitSelections.length; i++) {
+            splitSelections[i].innerHTML = options
+        }
+    }
+
+    updateCheckpointTable() {
+        if (this.checkpoints.length == 0) {   
+            const dummy = "<td>-</td>".repeat(9)
+            tb.innerHTML = `
+                <tr><td>Start<br>${dummy}</tr>
+                <tr><td>Finish<br>${dummy}</tr>
+                <tr><td>Total</td>${dummy}</tr>`;
+            return;
+        }
+
+        const total = this.calculateTotal();
+        tb.innerHTML = ''
+        tb.insertRow().innerHTML = `<td>${this.prefixedName(0)}</td>`+"<td>-</td>".repeat(9)
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
-            const prefix = ((i == this.checkpoints.length - 1) ? "Finish: " : `CP${i}: `)
             tb.insertRow().innerHTML = 
             `
-                <td>${prefix+cp.name}</td>
+                <td>${this.prefixedName(i)}</td>
                 <td>${cp.dist}</td>
                 <td>${cp.elev}</td>
                 <td>${displayFigure(cp.EP, 1)}</td>
@@ -96,36 +130,38 @@ class CheckpointManager {
                 <td>-</td>
                 <td>-</td>
             `
-        console.log('updated the cp table')
+    
+    }
+
+    render() {
+        this.updateCheckpointTable();
+        this.updateSplitSelection();
     }
 
     save() {
         localStorage.setItem("checkpoints", JSON.stringify(this.checkpoints));
     }
 
+    removeSplit() {
+
+    }
+    
     clear() {
-        // this.checkpoints = []
+        this.checkpoints = []
         localStorage.removeItem("checkpoints")
     }
 }
 
 
 
-const cpmanager = new CheckpointManager();
+const raceUltra = new RacePlan();
 
 window.onload = (e) => {
-    const CPs = window.localStorage.getItem("checkpoints")
+    const CPs = window.localStorage.getItem("checkpoints");
     
-    if (CPs) {
-        cpmanager.checkpoints = JSON.parse(CPs)
-        cpmanager.render()
-    }
-
+    if (CPs) { raceUltra.checkpoints = JSON.parse(CPs) };
+    raceUltra.render();
 }
-
-
-const formAddCP = document.getElementById('form-addcp');
-const formRemoveCP = document.getElementById('form-removecp');
 
 formAddCP.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -134,15 +170,16 @@ formAddCP.addEventListener('submit', (e) => {
         formAddCP.querySelector('input[name="cpdistance"]').valueAsNumber,
         formAddCP.querySelector('input[name="cpelevgain"]').valueAsNumber
     )
-    cpmanager.addCheckpoint(cp)
-    cpmanager.save()
-    cpmanager.render()
+    raceUltra.addCheckpoint(cp);
+    raceUltra.save();
+    raceUltra.render();
+    
     
     formAddCP.reset();
 })
 
 formRemoveCP.addEventListener('submit', (e) => {
     e.preventDefault();
-    cpmanager.clear()
-    cpmanager.render()
+    raceUltra.clear();
+    raceUltra.render();
 })

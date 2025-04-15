@@ -16,6 +16,7 @@
 button {
     border: none;
     background: transparent;
+    transition: transform 0.2s;
 }
 
 /* view switch, form switch */
@@ -164,7 +165,7 @@ main {
     justify-content: space-between; */
 }
 
-.metric:active {
+.metric:active, button:active {
     transform: scale(0.95);
     touch-action: manipulation;
 }
