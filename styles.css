@@ -336,6 +336,7 @@ label[for="race-start"] {
 .form-menu-item {
     border: 1px solid var(--trivial);
     border-radius: var(--border-radius);
+    padding: 0.2rem;
     width: 100%;
 }
 
