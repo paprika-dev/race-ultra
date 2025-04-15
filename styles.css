@@ -70,7 +70,7 @@ body {
 }
 
 table {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
 }
 
 
@@ -356,4 +356,16 @@ label[for="race-start"] {
 .table-container {
     overflow-x: scroll;
     max-width: var(--max-width);
+}
+
+.leftbordercol {
+    border-left: 1px solid var(--trivial);
+}
+
+table td:nth-child(3),
+table td:nth-child(6),
+table td:nth-child(8),
+table td:nth-child(10)
+{
+  border-left: 1px solid var(--trivial);
 }
