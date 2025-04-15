@@ -324,13 +324,14 @@ label[for="race-start"] {
 
 .form-menu {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 2fr 3fr;
     gap: 0.8rem;
 }
 
 .form-menu-item i, .form-menu-item button{
     color: var(--trivial);
     font-size: 0.85rem;
+    line-height: 0.85rem;
 }
 
 .form-menu-item {
