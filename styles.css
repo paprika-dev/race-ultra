@@ -324,29 +324,33 @@ label[for="race-start"] {
 
 .form-menu {
     display: grid;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 3fr 4fr;
     gap: 0.8rem;
 }
 
-.form-menu-item i, .form-menu-item button{
+
+.form-menu-item {
     color: var(--trivial);
     font-size: 0.85rem;
     line-height: 0.85rem;
-}
-
-.form-menu-item {
+    text-align: left;
     border: 1px solid var(--trivial);
     border-radius: var(--border-radius);
-    padding: 0.2rem;
+    padding: 0.5rem;
     width: 100%;
 }
 
-.selected.form-menu-item button, .selected.form-menu-item i {
-    color: var(--primary);
+.form-menu-item i {
+    color: var(--trivial);
 }
 
 .selected.form-menu-item {
+    color: var(--primary);
     border-color: var(--primary);
+}
+
+.selected.form-menu-item i {
+    color: var(--primary);
 }
 
 .table-container {
