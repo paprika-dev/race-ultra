@@ -2,6 +2,7 @@
     --primary: #36bc9d;
     --secondary: #f97c4c;
     --trivial: #aabbb7cb;
+    --primary-pale: #36bc9d22;
     --background: #f5f5f5;
     --metric-bg: #f0f1ff;
     --text: #333;
@@ -121,7 +122,7 @@ main {
 
 .myprogress {
     height: 1rem;
-    background-color: #36bc9d22;
+    background-color: var(--primary-pale);
     width: 100%;
     margin-bottom: 1rem;
     border-radius: var(--border-radius);
@@ -358,14 +359,29 @@ label[for="race-start"] {
     max-width: var(--max-width);
 }
 
-.leftbordercol {
-    border-left: 1px solid var(--trivial);
+table td:nth-child(2),
+table td:nth-child(3),
+table td:nth-child(4),
+table td:nth-child(7),
+table td:nth-child(8)
+{
+  background: var(--primary-pale);
 }
 
-table td:nth-child(3),
-table td:nth-child(6),
-table td:nth-child(8),
-table td:nth-child(10)
-{
-  border-left: 1px solid var(--trivial);
+/* freeze first column */
+table th:nth-child(1),
+table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index: 3;
+    border-right: 1px solid var(--trivial);
+    border-collapse: separate;
+    text-align: left;
+    min-width: 6rem;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
 }
