@@ -19,18 +19,12 @@ function showForm(formId, btn) {
 }
 
 
-function displayfigure(x) {
-    return Number.parseFloat(x).toFixed(2);
-}
-
-
-function addRecceSplit(){
-
-}
-
 
 document.addEventListener("touchstart", function(){}, true);
 
+function displayFigure(x, dp) {
+    return Number.parseFloat(x).toFixed(dp)
+}
 
 const tb = document.getElementById('cptable-body');
 
@@ -43,9 +37,8 @@ class Checkpoint {
         this.name = name
         this.dist = dist
         this.elev = elev
+        this.EP = this.dist + this.elev * 0.01
     }
-
-    EP() { return this.dist + this.elev * 0.01 }
 }
 
 class CheckpointManager {
@@ -61,8 +54,9 @@ class CheckpointManager {
         return this.checkpoints.reduce((total, checkpoint) => {
             total.dist += checkpoint.dist;
             total.elev += checkpoint.elev;
+            total.EP += checkpoint.EP;
             return total;
-        }, { dist: 0, elev: 0 });
+        }, { dist: 0, elev: 0, EP: 0 });
     }
 
     render() {
@@ -79,8 +73,8 @@ class CheckpointManager {
                 <td>${prefix+cp.name}</td>
                 <td>${cp.dist}</td>
                 <td>${cp.elev}</td>
-                <td></td>
-                <td>-</td>
+                <td>${displayFigure(cp.EP, 1)}</td>
+                <td>${displayFigure(cp.EP/total.EP*100, 0)}</td>
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>
@@ -94,8 +88,8 @@ class CheckpointManager {
                 <td>Total</td>
                 <td>${total.dist}</td>
                 <td>${total.elev}</td>
-                <td>-</td>
-                <td>-</td>
+                <td>${displayFigure(total.EP, 1)}</td>
+                <td>100</td>
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>
@@ -152,10 +146,3 @@ formRemoveCP.addEventListener('submit', (e) => {
     cpmanager.clear()
     cpmanager.render()
 })
-
-
-function createEmptyCPTable() {
-    document.createElement(
-
-    )
-}
