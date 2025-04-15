@@ -9,7 +9,7 @@ function showView(viewId, btn) {
 }
 
 function showForm(formId, btn) {
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll('.cpinput');
     forms.forEach(f => f.classList.remove('active'));
     document.getElementById(formId).classList.add('active');
 
@@ -19,7 +19,7 @@ function showForm(formId, btn) {
 }
 
 
-const form = document.getElementById('form-add-cp');
+const form = document.getElementById('form-addcp');
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();

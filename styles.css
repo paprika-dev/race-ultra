@@ -18,7 +18,7 @@ button {
 }
 
 /* view switch, form switch */
-.view, form {
+.view, .cpinput {
     display: none;
 }
 
@@ -35,6 +35,11 @@ button {
 
 .trivial {
     color: var(--trivial);
+}
+
+.note {
+    font-size: 0.7rem;
+    font-style: italic;
 }
 
 p {
@@ -285,8 +290,8 @@ main {
     /* margin-bottom: 1rem; */
 }
 
-form.cpinput {
-    min-height: 25vh;
+#form-addcp, #form-removecp, #form-reccesplit, #form-settarget {
+    /* min-height: 37vh; */
     margin-bottom: 1rem;
 }
 
@@ -317,6 +322,12 @@ label[for="race-start"] {
     color: white;
 }
 
+.form-menu {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.8rem;
+}
+
 .form-menu-item i, .form-menu-item button{
     color: var(--trivial);
     font-size: 0.85rem;
@@ -325,6 +336,7 @@ label[for="race-start"] {
 .form-menu-item {
     border: 1px solid var(--trivial);
     border-radius: var(--border-radius);
+    width: 100%;
 }
 
 .selected.form-menu-item button, .selected.form-menu-item i {
