@@ -31,6 +31,8 @@ function showForm(formId, btn) {
 const tb = document.getElementById('cptable-body');
 const formAddCP = document.getElementById('form-addcp');
 const formRemoveCP = document.getElementById('form-removecp');
+const btnRemoveCP = document.getElementById('btn-removecp');
+const btnReset = document.getElementById('btn-reset');
 const splitSelections = document.getElementsByClassName('select-split')
 
 class Checkpoint {
@@ -50,6 +52,7 @@ class RacePlan {
 
     addCheckpoint(checkpoint) {
         this.checkpoints.push(checkpoint);
+        this.save();
     }
 
     prefixedName(i) {
@@ -142,11 +145,12 @@ class RacePlan {
         localStorage.setItem("checkpoints", JSON.stringify(this.checkpoints));
     }
 
-    removeSplit() {
-
+    removeCheckpoint(i) {
+        this.checkpoints.splice(i)
+        this.save()
     }
     
-    clear() {
+    reset() {
         this.checkpoints = []
         localStorage.removeItem("checkpoints")
     }
@@ -171,15 +175,20 @@ formAddCP.addEventListener('submit', (e) => {
         formAddCP.querySelector('input[name="cpelevgain"]').valueAsNumber
     )
     raceUltra.addCheckpoint(cp);
-    raceUltra.save();
     raceUltra.render();
-    
     
     formAddCP.reset();
 })
 
-formRemoveCP.addEventListener('submit', (e) => {
+btnRemoveCP.addEventListener('click', (e) => {
     e.preventDefault();
-    raceUltra.clear();
+    let i = formRemoveCP.getElementsByTagName('select')[0].value
+    raceUltra.removeCheckpoint(i);
+    raceUltra.render();
+})
+
+btnReset.addEventListener('click', (e) => {
+    e.preventDefault();
+    raceUltra.reset();
     raceUltra.render();
 })
