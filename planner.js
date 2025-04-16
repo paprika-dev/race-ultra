@@ -78,7 +78,7 @@ class RaceTime {
 
     minutesToTime(mins) {
         const hours = Math.floor(mins / 60);
-        const minutes = Math.floor(mins % 60); // floored to display a shorter target split
+        const minutes = Math.round(mins % 60);
         return `${this.zeropad(hours)}:${this.zeropad(minutes)}`;
     }
     
