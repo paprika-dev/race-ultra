@@ -105,7 +105,7 @@ class RacePlan {
 
     // Local Storage
     saveTarget() {
-        localStorage.setItem("target", this.target);
+        localStorage.setItem("target", JSON.stringify(this.target));
     }
 
     saveCheckpoints() {
@@ -116,10 +116,18 @@ class RacePlan {
     removeTarget() {
         this.target = { rt: "", EPH: "" }
         localStorage.removeItem("target");
+
+        for (let i = 1; i < this.checkpoints.length; i++) {
+            const cp = this.checkpoints[i]
+            cp.targetsplit = "-"
+            cp.targetEPH = "-"
+        }
+        this.saveCheckpoints()
     }  
 
     reset() {
         this.checkpoints = [];
+        this.total = { dist: 0, elev: 0, EP: 0 }
         localStorage.removeItem("checkpoints");
         localStorage.removeItem("total");
 
@@ -132,7 +140,7 @@ class RacePlan {
         this.target.rt = targetrt;
         this.target.EPH = raceTime.EPH(this.total.EP, raceTime.timeToMinutes(this.target.rt))
 
-        // set target split & split EPH
+        // set target split, EPH & effort(%)
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
             const mins = raceTime.allocateMinutes(this.target.rt, cp.percentageEP)
@@ -152,10 +160,10 @@ class RacePlan {
         cp.targetEPH = raceTime.EPH(cp.EP, raceTime.timeToMinutes(split))
 
         // adjust total target race time & avg EPH
-        totalmins = this.checkpoints.reduce((mins, checkpoint) => {
-            mins += raceTime.timeToMinutes(checkpoint.targesplit);
-            return mins;
-        }, 0);
+        let totalmins = 0
+        for (let k = 1; k < this.checkpoints.length; k++) {
+            totalmins += raceTime.timeToMinutes(this.checkpoints[k].targetsplit);
+        }
         this.target.rt = raceTime.minutesToTime(totalmins);
         this.target.EPH = raceTime.EPH(this.total.EP, totalmins);
 
@@ -282,7 +290,7 @@ class RacePlan {
                 <td>${this.total.elev}</td>
                 <td>${displayFigure(this.total.EP, 1)}</td>
                 <td>100</td>
-                <td>-</td>
+                <td>100</td>
                 <td>${this.target.rt}</td>
                 <td>-</td>
                 <td>${this.target.EPH}</td>
@@ -365,16 +373,17 @@ formTargetSplit.addEventListener('submit', (e)=>{
 
     if (raceTime.isValidTime(inputTargetSplit.value)) {
         let i = formTargetSplit.getElementsByTagName('select')[0].value
-        console.log(formTargetSplit.getElementsByTagName('select')[0]);
         if (i != "") { raceUltra.adjustTargetSplit(i, inputTargetSplit.value) };
         inputTargetSplit.placeholder = "hh:mm";
         raceUltra.render();
     } else {
-        formTargetSplit.reset();
         inputTargetSplit.placeholder = "hh:mm (please input in valid format)";
     }
+
+    formTargetSplit.reset();
 })
 
+// record recce
 formRecce.addEventListener('submit', (e)=>{
     e.preventDefault();
 })
