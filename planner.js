@@ -62,17 +62,32 @@ class RaceTime {
         return /^\d{1,2}:[0-5][0-9]$/.test(input)
     }
 
+    zeropad(num) {
+        return num.toString().padStart(2, '0')
+    }
+
+    timeToHours(timeStr) {
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        return hours + minutes / 60;
+    }
+
     timeToMinutes(timeStr) {
         const [hours, minutes] = timeStr.split(':').map(Number);
         return hours * 60 + minutes;
     }
 
-    minutesToTime(str) {
-
+    minutesToTime(mins) {
+        const hours = Math.floor(mins / 60);
+        const minutes = Math.round(mins % 60);
+        return `${this.zeropad(hours)}:${this.zeropad(minutes)}`;
     }
     
     allocateSplit(raceTime, percentage) {
+        return this.minutesToTime(this.timeToMinutes(raceTime) * percentage)
+    }
 
+    EPH(EP, split){
+        return displayFigure(EP / this.timeToHours(split), 1)
     }
 
     timeDiff(time1, time2) {
@@ -192,17 +207,19 @@ class RacePlan {
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
+            const percentageEP = cp.EP/total.EP
+            const targetsplit = raceTime.allocateSplit(this.targetrt, percentageEP)
             tb.insertRow().innerHTML = 
             `
                 <td>${this.prefixedName(i)}</td>
                 <td>${cp.dist}</td>
                 <td>${cp.elev}</td>
                 <td>${displayFigure(cp.EP, 1)}</td>
-                <td>${displayFigure(cp.EP/total.EP*100, 0)}</td>
+                <td>${displayFigure(percentageEP*100, 0)}</td>
                 <td>-</td>
+                <td>${targetsplit}</td>
                 <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <td>${raceTime.EPH(cp.EP, targetsplit)}</td>
                 <td>-</td>
             `
         }
