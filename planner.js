@@ -43,6 +43,9 @@ const btnReset = document.getElementById('btn-reset');
 const formTargetRT = document.getElementById('form-settargetrt');
 const inputTargetRT = formTargetRT.querySelector('input[name="rtTarget"]');
 const formTargetSplit = document.getElementById('form-settargetsplit');
+const inputTargetSplit = formTargetSplit.querySelector('input[name="splitTarget"]');
+
+const formRecce = document.getElementById('form-reccesplit');
 
 const splitSelections = document.getElementsByClassName('select-split');
 
@@ -53,6 +56,8 @@ class Checkpoint {
         this.dist = dist
         this.elev = elev
         this.EP = this.dist + this.elev * 0.01
+        this.targetsplit = "-"
+        this.targetEPH = "-"
     }
 }
 
@@ -64,11 +69,6 @@ class RaceTime {
 
     zeropad(num) {
         return num.toString().padStart(2, '0')
-    }
-
-    timeToHours(timeStr) {
-        const [hours, minutes] = timeStr.split(':').map(Number);
-        return hours + minutes / 60;
     }
 
     timeToMinutes(timeStr) {
@@ -98,41 +98,101 @@ class RaceTime {
 class RacePlan {
     constructor() {
         this.raceStart = "";
-        this.targetrt = "";
         this.checkpoints = [];
+        this.target = { rt: "", EPH: "" }
+        this.total = { dist: 0, elev: 0, EP: 0 }
     }
 
-    setTarget(targetrt){
-        this.targetrt = targetrt;
-        localStorage.setItem("targetrt", this.targetrt);
-    }
-
-    removeTarget() {
-        this.targetrt = "";
-        localStorage.removeItem("targetrt");
+    // Local Storage
+    saveTarget() {
+        localStorage.setItem("target", this.target);
     }
 
     saveCheckpoints() {
         localStorage.setItem("checkpoints", JSON.stringify(this.checkpoints));
+        localStorage.setItem("total", JSON.stringify(this.total));
+    }
+
+    removeTarget() {
+        this.target = { rt: "", EPH: "" }
+        localStorage.removeItem("target");
+    }  
+
+    reset() {
+        this.checkpoints = [];
+        localStorage.removeItem("checkpoints");
+        localStorage.removeItem("total");
+
+        this.removeTarget();
+    }    
+
+    // Target
+    setTargetRT(targetrt){
+        // set target total race time & avg EPH
+        this.target.rt = targetrt;
+        this.target.EPH = raceTime.EPH(this.total.EP, raceTime.timeToMinutes(this.target.rt))
+
+        // set target split & split EPH
+        for (let i = 1; i < this.checkpoints.length; i++) {
+            const cp = this.checkpoints[i]
+            const mins = raceTime.allocateMinutes(this.target.rt, cp.percentageEP)
+            cp.targetsplit = raceTime.minutesToTime(mins)
+            cp.targetEPH = raceTime.EPH(cp.EP, mins)
+        };
+
+        // save target and checkpoints
+        this.saveTarget();
+        this.saveCheckpoints();
+    }
+
+    adjustTargetSplit(i, split){
+        // adjust target split & split EPH
+        const cp = this.checkpoints[i]
+        cp.targetsplit = split;
+        cp.targetEPH = raceTime.EPH(cp.EP, raceTime.timeToMinutes(split))
+
+        // adjust total target race time & avg EPH
+        totalmins = this.checkpoints.reduce((mins, checkpoint) => {
+            mins += raceTime.timeToMinutes(checkpoint.targesplit);
+            return mins;
+        }, 0);
+        this.target.rt = raceTime.minutesToTime(totalmins);
+        this.target.EPH = raceTime.EPH(this.total.EP, totalmins);
+
+        // save target and checkpoints
+        this.saveTarget();
+        this.saveCheckpoints();
+    }
+
+    // Checkpoints
+    calculateTotal() {
+        this.total = this.checkpoints.reduce((total, checkpoint) => {
+            total.dist += checkpoint.dist;
+            total.elev += checkpoint.elev;
+            total.EP += checkpoint.EP;
+            return total;
+        }, { dist: 0, elev: 0, EP: 0 });
+
+        for (let i = 1; i < this.checkpoints.length; i++) {
+            const cp = this.checkpoints[i]
+            cp.percentageEP = cp.EP/this.total.EP
+        };
     }
 
     addCheckpoint(checkpoint) {
         this.checkpoints.push(checkpoint);
+        this.calculateTotal();
         this.saveCheckpoints();
     }
     
+
     removeCheckpoint(i) {
         this.checkpoints.splice(i, 1);
+        this.calculateTotal();
         this.saveCheckpoints();
-    }
-    
-    reset() {
-        this.checkpoints = [];
-        localStorage.removeItem("checkpoints");
+    }      
 
-        this.removeTarget();
-    }
-
+    // Rendering
     prefixedName(i) {
         let prefix = ""
         switch (i) { 
@@ -144,15 +204,6 @@ class RacePlan {
                 prefix = "CP" + i + ": ";
         }
         return prefix + this.checkpoints[i].name
-    }
-
-    calculateTotal() {
-        return this.checkpoints.reduce((total, checkpoint) => {
-            total.dist += checkpoint.dist;
-            total.elev += checkpoint.elev;
-            total.EP += checkpoint.EP;
-            return total;
-        }, { dist: 0, elev: 0, EP: 0 });
     }
 
     updateInputSection() {
@@ -169,12 +220,12 @@ class RacePlan {
             inputElev.style.display = "block";
         }
 
-        if (this.targetrt == "") {
+        if (this.target.rt == "") {
             formTargetRT.reset();
             formTargetSplit.style.display = "none"
             
         } else {
-            inputTargetRT.value = this.targetrt
+            inputTargetRT.value = this.target.rt
             formTargetSplit.style.display = "block"
         }
     }
@@ -203,24 +254,11 @@ class RacePlan {
         }
 
         // has input data
-        const total = this.calculateTotal();
-        const avgTargetEPH = this.targetrt == "" ? "-" : 
-                raceTime.EPH(total.EP, raceTime.timeToMinutes(this.targetrt))
-
         tb.innerHTML = ''
         tb.insertRow().innerHTML = `<td>${this.prefixedName(0)}</td>`+"<td>-</td>".repeat(9)
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
-            const percentageEP = cp.EP/total.EP
-
-            let targetsplit = "-";
-            let targetEPH = "-";
-            if (this.targetrt != "") {
-                const mins = raceTime.allocateMinutes(this.targetrt, percentageEP)
-                targetsplit = raceTime.minutesToTime(mins)
-                targetEPH = raceTime.EPH(cp.EP, mins)
-            }
 
             tb.insertRow().innerHTML = 
             `
@@ -228,11 +266,11 @@ class RacePlan {
                 <td>${cp.dist}</td>
                 <td>${cp.elev}</td>
                 <td>${displayFigure(cp.EP, 1)}</td>
-                <td>${displayFigure(percentageEP*100, 0)}</td>
+                <td>${displayFigure(cp.percentageEP*100, 0)}</td>
                 <td>-</td>
-                <td>${targetsplit}</td>
+                <td>${cp.targetsplit}</td>
                 <td>-</td>
-                <td>${targetEPH}</td>
+                <td>${cp.targetEPH}</td>
                 <td>-</td>
             `
         }
@@ -240,14 +278,14 @@ class RacePlan {
         tb.insertRow().innerHTML = 
             `
                 <td>Total</td>
-                <td>${displayFigure(total.dist, 1)}</td>
-                <td>${total.elev}</td>
-                <td>${displayFigure(total.EP, 1)}</td>
+                <td>${displayFigure(this.total.dist, 1)}</td>
+                <td>${this.total.elev}</td>
+                <td>${displayFigure(this.total.EP, 1)}</td>
                 <td>100</td>
                 <td>-</td>
-                <td>${this.targetrt == "" ? "-" : this.targetrt}</td>
+                <td>${this.target.rt}</td>
                 <td>-</td>
-                <td>${avgTargetEPH}</td>
+                <td>${this.target.EPH}</td>
                 <td>-</td>
             `
     
@@ -267,10 +305,12 @@ const raceTime = new RaceTime();
 
 window.onload = (e) => {
     const CPs = window.localStorage.getItem("checkpoints");
-    const targetrt = window.localStorage.getItem("targetrt");
+    const total = window.localStorage.getItem("total");
+    const target = window.localStorage.getItem("target");
     
     if (CPs) { raceUltra.checkpoints = JSON.parse(CPs) };
-    if (targetrt) {raceUltra.targetrt = targetrt }
+    if (total) {raceUltra.total = JSON.parse(total) }
+    if (target) {raceUltra.target = JSON.parse(target) }
     raceUltra.render();
 }
 
@@ -309,7 +349,7 @@ formTargetRT.addEventListener('submit', (e)=>{
     e.preventDefault();
 
     if (raceTime.isValidTime(inputTargetRT.value)) {
-        raceUltra.setTarget(inputTargetRT.value);
+        raceUltra.setTargetRT(inputTargetRT.value);
         inputTargetRT.placeholder = "hh:mm";
     } else {
         formTargetRT.reset();
@@ -321,5 +361,20 @@ formTargetRT.addEventListener('submit', (e)=>{
 })
 
 formTargetSplit.addEventListener('submit', (e)=>{
+    e.preventDefault();
+
+    if (raceTime.isValidTime(inputTargetSplit.value)) {
+        let i = formTargetSplit.getElementsByTagName('select')[0].value
+        console.log(formTargetSplit.getElementsByTagName('select')[0]);
+        if (i != "") { raceUltra.adjustTargetSplit(i, inputTargetSplit.value) };
+        inputTargetSplit.placeholder = "hh:mm";
+        raceUltra.render();
+    } else {
+        formTargetSplit.reset();
+        inputTargetSplit.placeholder = "hh:mm (please input in valid format)";
+    }
+})
+
+formRecce.addEventListener('submit', (e)=>{
     e.preventDefault();
 })
