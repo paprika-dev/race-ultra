@@ -78,16 +78,16 @@ class RaceTime {
 
     minutesToTime(mins) {
         const hours = Math.floor(mins / 60);
-        const minutes = Math.round(mins % 60);
+        const minutes = Math.floor(mins % 60); // floored to display a shorter target split
         return `${this.zeropad(hours)}:${this.zeropad(minutes)}`;
     }
     
-    allocateSplit(raceTime, percentage) {
-        return this.minutesToTime(this.timeToMinutes(raceTime) * percentage)
+    allocateMinutes(raceTime, percentage) {
+        return this.timeToMinutes(raceTime) * percentage
     }
 
-    EPH(EP, split){
-        return displayFigure(EP / this.timeToHours(split), 1)
+    EPH(EP, mins){
+        return displayFigure(EP / mins * 60, 2)
     }
 
     timeDiff(time1, time2) {
@@ -192,6 +192,7 @@ class RacePlan {
     }
 
     updateCheckpointTable() {
+        // no input data
         if (this.checkpoints.length == 0) {   
             const dummy = "<td>-</td>".repeat(9)
             tb.innerHTML = `
@@ -201,14 +202,25 @@ class RacePlan {
             return;
         }
 
+        // has input data
         const total = this.calculateTotal();
+        const avgTargetEPH = raceTime.EPH(total.EP, raceTime.timeToMinutes(this.targetrt))
+
         tb.innerHTML = ''
         tb.insertRow().innerHTML = `<td>${this.prefixedName(0)}</td>`+"<td>-</td>".repeat(9)
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
             const percentageEP = cp.EP/total.EP
-            const targetsplit = raceTime.allocateSplit(this.targetrt, percentageEP)
+
+            let targetsplit = "-";
+            let targetEPH = "-";
+            if (this.targetrt != "") {
+                const mins = raceTime.allocateMinutes(this.targetrt, percentageEP)
+                targetsplit = raceTime.minutesToTime(mins)
+                targetEPH = raceTime.EPH(cp.EP, mins)
+            }
+
             tb.insertRow().innerHTML = 
             `
                 <td>${this.prefixedName(i)}</td>
@@ -219,7 +231,7 @@ class RacePlan {
                 <td>-</td>
                 <td>${targetsplit}</td>
                 <td>-</td>
-                <td>${raceTime.EPH(cp.EP, targetsplit)}</td>
+                <td>${targetEPH}</td>
                 <td>-</td>
             `
         }
@@ -227,14 +239,14 @@ class RacePlan {
         tb.insertRow().innerHTML = 
             `
                 <td>Total</td>
-                <td>${total.dist}</td>
+                <td>${displayFigure(total.dist, 1)}</td>
                 <td>${total.elev}</td>
                 <td>${displayFigure(total.EP, 1)}</td>
                 <td>100</td>
                 <td>-</td>
+                <td>${this.targetrt}</td>
                 <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <td>${avgTargetEPH}</td>
                 <td>-</td>
             `
     
