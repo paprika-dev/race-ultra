@@ -40,14 +40,14 @@
                 </div>
 
                 <!-- add checkpoints -->
-                <form class="cpinput active" id="form-addcp">
+                <form class="cpinput" id="form-addcp">
                     <input required class="form-control mb-3" type="text" name="cpname" placeholder="Checkpoint Name">
-                    <div class="row gx-2 mb-3">
+                    <div id="input-dist-elev" class="row gx-2 mb-3">
                         <div class="col">
-                            <input required class="form-control" type="number" name="cpdistance" placeholder="Distance (km)">
+                            <input required class="form-control" type="number" name="cpdistance" step="0.01" min="0" placeholder="Distance (km)">
                         </div>
                         <div class="col">
-                            <input required class="form-control" type="number" name="cpelevgain" placeholder="Elevation Gain (m)">
+                            <input required class="form-control" type="number" name="cpelevgain" min="0" placeholder="Elevation Gain (m)">
                         </div>
                     </div>
                     <button class="input-btn py-2 px-3"><i class="bi bi-geo-fill"></i> Add Checkpoint</button>
@@ -68,30 +68,22 @@
                 </form>
 
                 <!-- set target split -->
-                <div class="cpinput" id="form-settarget">
-                    <form class="mb-4">
-                        <!-- <div class="row gx-2 mb-3">
-                            <div class="col-5">
-                                
-                            </div>
-                            <div class="col-7">
-                                
-                            </div>
-                        </div> -->
-                        <input class="form-control mb-3" type="text" name="rtTarget" placeholder="hh:mm">
+                <div class="cpinput active" id="form-settarget">
+                    <form class="mb-4" id="form-settargetrt">
+                        <input required class="form-control mb-3" type="text" name="rtTarget" placeholder="hh:mm">
                         <button class="input-btn py-2 px-3 mb-3"><i class="bi bi-flag-fill"></i> Set Target Race Time</button>
                         <p class="note">By default, target splits are allocated based on %EP.
                             e.g., For a target race time of 5h, a race section w/ 10%EP has a 30-min target split.</p>
                     </form>
 
-                    <form>
+                    <form id="form-settargetsplit">
                         <div class="row gx-2 mb-3">
                             <div class="col-7">
                                 <select class="form-select select-split" aria-label="select split">
                                 </select>
                             </div>
                             <div class="col-5">
-                                <input class="form-control" type="text" name="splitTarget" placeholder="hh:mm">
+                                <input required class="form-control" type="text" name="splitTarget" placeholder="hh:mm">
                             </div>
                         </div>
                         <button class="remove-btn py-2 px-3"><i class="bi bi-stopwatch-fill"></i> Adjust Target Split</button>

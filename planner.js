@@ -26,14 +26,26 @@ function showForm(formId, btn) {
     formselections[btn].classList.add('selected');
 }
 
-// Checkpoint Table
+// Race Planner
 
 const tb = document.getElementById('cptable-body');
+
 const formAddCP = document.getElementById('form-addcp');
+const inputName = formAddCP.querySelector('input[name="cpname"]');
+const inputDist = formAddCP.querySelector('input[name="cpdistance"]');
+const inputElev = formAddCP.querySelector('input[name="cpelevgain"]');
+const inputDistElev = document.getElementById('input-dist-elev');
+
 const formRemoveCP = document.getElementById('form-removecp');
 const btnRemoveCP = document.getElementById('btn-removecp');
 const btnReset = document.getElementById('btn-reset');
-const splitSelections = document.getElementsByClassName('select-split')
+
+const formTargetRT = document.getElementById('form-settargetrt');
+const inputTargetRT = formTargetRT.querySelector('input[name="rtTarget"]');
+const formTargetSplit = document.getElementById('form-settargetsplit');
+
+const splitSelections = document.getElementsByClassName('select-split');
+
 
 class Checkpoint {
     constructor(name, dist, elev) {
@@ -44,15 +56,66 @@ class Checkpoint {
     }
 }
 
+class RaceTime {
+    isValidTime(input) {
+        // check if in hh:mm format
+        return /^\d{1,2}:[0-5][0-9]$/.test(input)
+    }
+
+    timeToMinutes(timeStr) {
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        return hours * 60 + minutes;
+    }
+
+    minutesToTime(str) {
+
+    }
+    
+    allocateSplit(raceTime, percentage) {
+
+    }
+
+    timeDiff(time1, time2) {
+
+    }
+}
+
 class RacePlan {
     constructor() {
         this.raceStart = "";
+        this.targetrt = "";
         this.checkpoints = [];
+    }
+
+    setTarget(targetrt){
+        this.targetrt = targetrt;
+        localStorage.setItem("targetrt", this.targetrt);
+    }
+
+    removeTarget() {
+        this.targetrt = "";
+        localStorage.removeItem("targetrt");
+    }
+
+    saveCheckpoints() {
+        localStorage.setItem("checkpoints", JSON.stringify(this.checkpoints));
     }
 
     addCheckpoint(checkpoint) {
         this.checkpoints.push(checkpoint);
-        this.save();
+        this.saveCheckpoints();
+    }
+    
+    removeCheckpoint(i) {
+        this.checkpoints.splice(i, 1);
+        this.saveCheckpoints();
+    }
+    
+    reset() {
+        this.checkpoints = [];
+        localStorage.removeItem("checkpoints");
+
+        this.removeTarget();
     }
 
     prefixedName(i) {
@@ -77,8 +140,32 @@ class RacePlan {
         }, { dist: 0, elev: 0, EP: 0 });
     }
 
+    updateInputSection() {
+        // checkpoint input
+        if (this.checkpoints.length == 0) {
+            inputName.placeholder = "Starting Location";
+            inputDist.style.display = "none";
+            inputElev.style.display = "none";
+            inputDist.value = 0;
+            inputElev.value = 0;
+        } else {
+            inputName.placeholder = "Checkpoint Name";
+            inputDist.style.display = "block";
+            inputElev.style.display = "block";
+        }
+
+        if (this.targetrt == "") {
+            formTargetRT.reset();
+            formTargetSplit.style.display = "none"
+            
+        } else {
+            inputTargetRT.value = this.targetrt
+            formTargetSplit.style.display = "block"
+        }
+    }
+
     updateSplitSelection() {
-        let options = "<option selected>Select Split</option>"
+        let options = `<option value="">Select Split</option>`
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             options += `<option value="${i}">${this.prefixedName(i)}</option>`;
@@ -137,42 +224,35 @@ class RacePlan {
     }
 
     render() {
+        this.updateInputSection();
         this.updateCheckpointTable();
         this.updateSplitSelection();
     }
-
-    save() {
-        localStorage.setItem("checkpoints", JSON.stringify(this.checkpoints));
-    }
-
-    removeCheckpoint(i) {
-        this.checkpoints.splice(i)
-        this.save()
-    }
-    
-    reset() {
-        this.checkpoints = []
-        localStorage.removeItem("checkpoints")
-    }
 }
 
 
-
+// Race Ultra
 const raceUltra = new RacePlan();
+const raceTime = new RaceTime();
 
 window.onload = (e) => {
     const CPs = window.localStorage.getItem("checkpoints");
+    const targetrt = window.localStorage.getItem("targetrt");
     
     if (CPs) { raceUltra.checkpoints = JSON.parse(CPs) };
+    if (targetrt) {raceUltra.targetrt = targetrt }
     raceUltra.render();
 }
 
+// input view
+
+/// add CP
 formAddCP.addEventListener('submit', (e) => {
     e.preventDefault();
     cp = new Checkpoint(
-        formAddCP.querySelector('input[name="cpname"]').value,
-        formAddCP.querySelector('input[name="cpdistance"]').valueAsNumber,
-        formAddCP.querySelector('input[name="cpelevgain"]').valueAsNumber
+        inputName.value,
+        inputDist.valueAsNumber,
+        inputElev.valueAsNumber
     )
     raceUltra.addCheckpoint(cp);
     raceUltra.render();
@@ -180,10 +260,11 @@ formAddCP.addEventListener('submit', (e) => {
     formAddCP.reset();
 })
 
+/// remove CP
 btnRemoveCP.addEventListener('click', (e) => {
     e.preventDefault();
     let i = formRemoveCP.getElementsByTagName('select')[0].value
-    raceUltra.removeCheckpoint(i);
+    if (i != "") { raceUltra.removeCheckpoint(i) };
     raceUltra.render();
 })
 
@@ -191,4 +272,24 @@ btnReset.addEventListener('click', (e) => {
     e.preventDefault();
     raceUltra.reset();
     raceUltra.render();
+})
+
+/// set target
+formTargetRT.addEventListener('submit', (e)=>{
+    e.preventDefault();
+
+    if (raceTime.isValidTime(inputTargetRT.value)) {
+        raceUltra.setTarget(inputTargetRT.value);
+        inputTargetRT.placeholder = "hh:mm";
+    } else {
+        formTargetRT.reset();
+        raceUltra.removeTarget();
+        inputTargetRT.placeholder = "hh:mm (please input in valid format)";
+    }
+
+    raceUltra.render();
+})
+
+formTargetSplit.addEventListener('submit', (e)=>{
+    e.preventDefault();
 })
