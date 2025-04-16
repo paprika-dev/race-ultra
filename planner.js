@@ -59,7 +59,7 @@ class Checkpoint {
 class RaceTime {
     isValidTime(input) {
         // check if in hh:mm format
-        return /^\d{1,2}:[0-5][0-9]$/.test(input)
+        return /^\d{2}:[0-5][0-9]$/.test(input)
     }
 
     zeropad(num) {
@@ -204,7 +204,8 @@ class RacePlan {
 
         // has input data
         const total = this.calculateTotal();
-        const avgTargetEPH = raceTime.EPH(total.EP, raceTime.timeToMinutes(this.targetrt))
+        const avgTargetEPH = this.targetrt == "" ? "-" : 
+                raceTime.EPH(total.EP, raceTime.timeToMinutes(this.targetrt))
 
         tb.innerHTML = ''
         tb.insertRow().innerHTML = `<td>${this.prefixedName(0)}</td>`+"<td>-</td>".repeat(9)
@@ -244,7 +245,7 @@ class RacePlan {
                 <td>${displayFigure(total.EP, 1)}</td>
                 <td>100</td>
                 <td>-</td>
-                <td>${this.targetrt}</td>
+                <td>${this.targetrt == "" ? "-" : this.targetrt}</td>
                 <td>-</td>
                 <td>${avgTargetEPH}</td>
                 <td>-</td>
