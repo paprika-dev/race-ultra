@@ -4,6 +4,12 @@ class Race {
         this.total = { dist: 0, elev: 0, EP: 0 };
         this.target = { rt: "", EPH: "" };
         this.recce = { rt: "", EPH: "", fullRecce: true };
+        this.progress = { lastcheckpoint: 0, perc: "" }
+        this.actual = { rt: "", buffer: "" }
+        
+        // this.racestart = ""
+        // this.rt = { passed: "", target:"", projected: "", buffer: "" }
+        // this.pace = { lastsplit: "", target:"", projected: "", plan: "" }
     }
 
     prefixedName(i) {

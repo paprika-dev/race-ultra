@@ -2,13 +2,6 @@ import { progressbar, dashboard, arrivalBtn } from "../utils/elements.js"
 import { race } from "../race/race.js"
 
 class RaceTracker {
-    constructor() {
-        this.racestart = ""
-        this.progress = { lastcheckpoint: 0, perc: "" }
-        this.rt = { passed: "", target:"", projected: "", buffer: "" }
-        this.pace = { lastsplit: "", target:"", projected: "", plan: "" }
-    }
-
     recordArrival(i){
         // const lastcheckpoint = this.checkpoints[i]
         // this.progress.lastcheckpoint = i
@@ -22,6 +15,7 @@ class RaceTracker {
         // this.checkpoints = 
     }
 
+    // Rendering
     updateDashboard() {
         progressbar.style.width = this.progress.perc;
         dashboard.rtpassed.innerHTML = this.rt.passed;
