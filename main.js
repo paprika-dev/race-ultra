@@ -109,11 +109,16 @@ formTargetRT.form.addEventListener('submit', (e)=>{
         formTargetRT.input.placeholder = "hh:mm";
     } else {
         formTargetRT.form.reset();
-        racePlan.removeTarget();
+        race.removeTarget();
         formTargetRT.input.placeholder = "hh:mm (please input in valid format)";
     }
 
     racePlan.render();
+})
+
+formTargetSplit.splitSelecton.addEventListener('change', (e)=>{
+    const i = formTargetSplit.splitSelecton.value;
+    formTargetSplit.input.value = race.checkpoints[i].target.split;
 })
 
 formTargetSplit.form.addEventListener('submit', (e)=>{

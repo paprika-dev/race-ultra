@@ -36,7 +36,7 @@ export const formsSetTarget = document.getElementById('forms-settarget')
 
 export const formTargetRT = {
     form: document.getElementById('form-settargetrt'),
-    input : document.querySelector('input[name="rtTarget"]'),
+    input : document.querySelector('input[name="rtTarget"]')
 };
 
 export const formTargetSplit = {
