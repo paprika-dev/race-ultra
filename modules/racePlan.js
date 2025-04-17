@@ -5,7 +5,7 @@ function displayFigure(x, dp) {
     return Number.parseFloat(x).toFixed(dp)
 }
 
-function displayTarget(x, dp) {
+function displayEffort(x, dp) {
     if (x) {
         if (dp == -1) return x
         return displayFigure(x, dp)
@@ -19,7 +19,7 @@ class RacePlan {
         this.checkpoints = [];
         this.total = { dist: 0, elev: 0, EP: 0 };
         this.target = { rt: "", EPH: "" };
-        this.recce = { rt: "", EPH: "" };
+        this.recce = { rt: "", EPH: "", fullRecce: true };
     }
 
     // Local Storage
@@ -51,7 +51,7 @@ class RacePlan {
         this.checkpoints = [];
         this.total = { dist: 0, elev: 0, EP: 0 };
         this.target = { rt: "", EPH: "" };
-        this.recce = { rt: "", EPH: "" };
+        this.recce = { rt: "", EPH: "", fullRecce: true };
 
         localStorage.removeItem("checkpoints");
         localStorage.removeItem("total");
@@ -113,20 +113,18 @@ class RacePlan {
         cp.recce.EPH = raceTime.EPH(cp.EP, mins);
 
         // check if full recce is done
-        let fullRecce = true;
         let totalmins = 0;
-
         for (let k = 1; k < this.checkpoints.length; k++) {
             const s = this.checkpoints[k].recce.split
             if (s == "") {
-                fullRecce = false
+                this.recce.fullRecce = false
                 break;
             }
             totalmins += raceTime.timeToMinutes(s);
         };
 
         // if full recce is made, adjust total recce race time & avg EPH, as well as split recce effort(%)
-        if (fullRecce) {
+        if (this.recce.fullRecce) {
             this.recce.rt = raceTime.minutesToTime(totalmins);
             this.recce.EPH = raceTime.EPH(this.total.EP, totalmins);
 
@@ -162,7 +160,6 @@ class RacePlan {
         this.saveCheckpoints();
     }
     
-
     removeCheckpoint(i) {
         this.checkpoints.splice(i, 1);
         this.calculateTotal();
@@ -244,12 +241,12 @@ class RacePlan {
                 <td>${cp.elev}</td>
                 <td>${displayFigure(cp.EP, 1)}</td>
                 <td>${displayFigure(cp.percentageEP*100, 0)}</td>
-                <td>${displayTarget(cp.target.effort*100, 0)}</td>
-                <td>-</td>
-                <td>${displayTarget(cp.target.split, -1)}</td>
-                <td>-</td>
-                <td>${displayTarget(cp.target.EPH, 2)}</td>
-                <td>-</td>
+                <td>${displayEffort(cp.target.effort*100, 0)}</td>
+                <td>${displayEffort(cp.recce.effort*100, 0)}</td>
+                <td>${displayEffort(cp.target.split, -1)}</td>
+                <td>${displayEffort(cp.recce.split, -1)}</td>
+                <td>${displayEffort(cp.target.EPH, 2)}</td>
+                <td>${displayEffort(cp.recce.EPH, 2)}</td>
             `
         }
 
@@ -261,11 +258,11 @@ class RacePlan {
                 <td>${displayFigure(this.total.EP, 1)}</td>
                 <td>100</td>
                 <td>${this.target.rt ? "100" : "-"}</td>
-                <td>-</td>
-                <td>${displayTarget(this.target.rt, -1)}</td>
-                <td>-</td>
-                <td>${displayTarget(this.target.EPH, 2)}</td>
-                <td>-</td>
+                <td>${this.recce.rt ? "100" : "-"}</td>
+                <td>${displayEffort(this.target.rt, -1)}</td>
+                <td>${displayEffort(this.recce.rt, -1)}</td>
+                <td>${displayEffort(this.target.EPH, 2)}</td>
+                <td>${displayEffort(this.recce.EPH, 2)}</td>
             `
     
     }

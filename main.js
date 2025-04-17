@@ -129,4 +129,15 @@ formTargetSplit.form.addEventListener('submit', (e)=>{
 // record recce
 formRecce.form.addEventListener('submit', (e)=>{
     e.preventDefault();
+
+    if (raceTime.isValidTime(formRecce.input.value)) {
+        let i = formRecce.splitSelecton.value
+        if (i != "") { raceUltra.reccordRecce(i, formRecce.input.value) };
+        formRecce.input.placeholder = "hh:mm";
+        raceUltra.render();
+    } else {
+        formRecce.input.placeholder = "hh:mm (please input in valid format)";
+    }
+
+    formRecce.form.reset();
 })

@@ -45,7 +45,9 @@ export const formTargetSplit = {
 };
 
 export const formRecce = {
-    form : document.getElementById('form-reccesplit')
+    form : document.getElementById('form-reccesplit'),
+    input : document.querySelector('input[name="reccesplit"]'),
+    splitSelecton: document.querySelector('#form-reccesplit select')
 };
 
 export const splitSelections = document.getElementsByClassName('select-split');
