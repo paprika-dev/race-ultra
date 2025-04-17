@@ -12,6 +12,7 @@ export const navbtn = {
     report : document.getElementById('nav-btn-3')
 };
 
+// plan view
 export const forms = document.querySelectorAll('.cpinput');
 export const formSelections = document.querySelectorAll('.form-menu-item');
 
@@ -53,4 +54,19 @@ export const formRecce = {
 export const splitSelections = document.getElementsByClassName('select-split');
 
 export const tb = document.getElementById('cptable-body');
+
+// tracker view
+export const progressbar = document.getElementsByClassName('myprogress-bar')[0]
+
+const metrics = document.getElementsByClassName('metric-figure')
+export const dashboard = {
+    rtpassed : metrics[0],
+    rttarget: metrics[1],
+    rtprojected: metrics[2],
+    buffer: metrics[3],
+    pace: metrics[4]
+}
+
+export const arrivalBtn =  document.getElementById('arrival-btn')
+
 

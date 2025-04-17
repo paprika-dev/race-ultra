@@ -1,5 +1,5 @@
 import { 
-
+    
     navbtn,
     view,
     formSelections,
@@ -8,13 +8,17 @@ import {
     formsSetTarget,
     formTargetRT, 
     formTargetSplit,
-    formRecce 
+    formRecce,
+    arrivalBtn
 
-} from "./modules/elements.js";
-import { showForm, showView } from "./modules/menu.js";
-import { raceTime } from "./modules/raceTime.js";
-import { raceUltra } from "./modules/racePlan.js";
-import { Checkpoint } from "./modules/checkpoint.js";
+} from "./modules/utils/elements.js";
+import { showForm, showView } from "./modules/ui/menu.js";
+import { RaceTime } from "./modules/utils/raceTime.js";
+import { racePlan } from "./modules/views/racePlan.js";
+import { raceTracker } from "./modules/views/raceTracker.js";
+import { Checkpoint } from "./modules/race/checkpoint.js";
+import { race } from "./modules/race/race.js";
+
 
 // Enable Touch
 document.addEventListener("touchstart", function(){}, true);
@@ -26,12 +30,13 @@ window.onload = (e) => {
     const target = window.localStorage.getItem("target");
     const recce = window.localStorage.getItem("recce");
     
-    if (checkpoints) { raceUltra.checkpoints = JSON.parse(checkpoints) };
-    if (total) {raceUltra.total = JSON.parse(total) };
-    if (target) {raceUltra.target = JSON.parse(target) };
-    if (recce) {raceUltra.target = JSON.parse(recce) };
+    if (checkpoints) { race.checkpoints = JSON.parse(checkpoints) };
+    if (total) {race.total = JSON.parse(total) };
+    if (target) {race.target = JSON.parse(target) };
+    if (recce) {race.target = JSON.parse(recce) };
 
-    raceUltra.render();
+    racePlan.render();
+    raceTracker.render();
 }
 
 // Switch View
@@ -75,8 +80,8 @@ formAddCP.form.addEventListener('submit', (e) => {
         formAddCP.inputDist.valueAsNumber,
         formAddCP.inputElev.valueAsNumber
     )
-    raceUltra.addCheckpoint(cp);
-    raceUltra.render();
+    racePlan.addCheckpoint(cp);
+    racePlan.render();
     
     formAddCP.form.reset();
 })
@@ -85,40 +90,40 @@ formAddCP.form.addEventListener('submit', (e) => {
 formRemoveCP.btnRemoveCP.addEventListener('click', (e) => {
     e.preventDefault();
     let i = formRemoveCP.splitSelecton.value
-    if (i != "") { raceUltra.removeCheckpoint(i) };
-    raceUltra.render();
+    if (i != "") { racePlan.removeCheckpoint(i) };
+    racePlan.render();
 })
 
 formRemoveCP.btnReset.addEventListener('click', (e) => {
     e.preventDefault();
-    raceUltra.reset();
-    raceUltra.render();
+    race.reset();
+    racePlan.render();
 })
 
 /// set target
 formTargetRT.form.addEventListener('submit', (e)=>{
     e.preventDefault();
 
-    if (raceTime.isValidTime(formTargetRT.input.value)) {
-        raceUltra.setTargetRT(formTargetRT.input.value);
+    if (RaceTime.isValidTime(formTargetRT.input.value)) {
+        racePlan.setTargetRT(formTargetRT.input.value);
         formTargetRT.input.placeholder = "hh:mm";
     } else {
         formTargetRT.form.reset();
-        raceUltra.removeTarget();
+        racePlan.removeTarget();
         formTargetRT.input.placeholder = "hh:mm (please input in valid format)";
     }
 
-    raceUltra.render();
+    racePlan.render();
 })
 
 formTargetSplit.form.addEventListener('submit', (e)=>{
     e.preventDefault();
 
-    if (raceTime.isValidTime(formTargetSplit.input.value)) {
+    if (RaceTime.isValidTime(formTargetSplit.input.value)) {
         let i = formTargetSplit.splitSelecton.value
-        if (i != "") { raceUltra.adjustTargetSplit(i, formTargetSplit.input.value) };
+        if (i != "") { racePlan.adjustTargetSplit(i, formTargetSplit.input.value) };
         formTargetSplit.input.placeholder = "hh:mm";
-        raceUltra.render();
+        racePlan.render();
     } else {
         formTargetSplit.input.placeholder = "hh:mm (please input in valid format)";
     }
@@ -130,14 +135,22 @@ formTargetSplit.form.addEventListener('submit', (e)=>{
 formRecce.form.addEventListener('submit', (e)=>{
     e.preventDefault();
 
-    if (raceTime.isValidTime(formRecce.input.value)) {
+    if (RaceTime.isValidTime(formRecce.input.value)) {
         let i = formRecce.splitSelecton.value
-        if (i != "") { raceUltra.reccordRecce(i, formRecce.input.value) };
+        if (i != "") { racePlan.reccordRecce(i, formRecce.input.value) };
         formRecce.input.placeholder = "hh:mm";
-        raceUltra.render();
+        racePlan.render();
     } else {
         formRecce.input.placeholder = "hh:mm (please input in valid format)";
     }
 
     formRecce.form.reset();
+})
+
+// tracker view
+arrivalBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+
+    raceTracker.recordArrival();
+    raceTracker.render();
 })

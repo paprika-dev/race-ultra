@@ -6,5 +6,8 @@ export class Checkpoint {
         this.EP = this.dist + this.elev * 0.01
         this.target = { effort: "", split: "", EPH: "" }
         this.recce = { effort: "", split: "", EPH: "" }
+        this.actual = { effort: "", split: "", EPH: "", buffer: "" }
     }
 }
+
+

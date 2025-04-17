@@ -273,7 +273,7 @@ main {
     padding: 0 1rem;
 }
 
-.arrival-btn, .genreport-btn {
+#arrival-btn, .genreport-btn {
     margin-top: 0.5rem;
     background-color: var(--primary);
     border: none;

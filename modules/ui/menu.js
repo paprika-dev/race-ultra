@@ -1,4 +1,4 @@
-import { views, navitems, forms, formSelections } from "./elements.js";
+import { views, navitems, forms, formSelections } from "../utils/elements.js";
 
 export function showView(view, i) {
     views.forEach(v => v.classList.remove('active'));
