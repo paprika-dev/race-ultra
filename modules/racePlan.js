@@ -17,18 +17,23 @@ class RacePlan {
     constructor() {
         this.raceStart = "";
         this.checkpoints = [];
-        this.target = { rt: "", EPH: "" }
-        this.total = { dist: 0, elev: 0, EP: 0 }
+        this.total = { dist: 0, elev: 0, EP: 0 };
+        this.target = { rt: "", EPH: "" };
+        this.recce = { rt: "", EPH: "" };
     }
 
     // Local Storage
+    saveCheckpoints() {
+        localStorage.setItem("checkpoints", JSON.stringify(this.checkpoints));
+        localStorage.setItem("total", JSON.stringify(this.total));
+    }
+
     saveTarget() {
         localStorage.setItem("target", JSON.stringify(this.target));
     }
 
-    saveCheckpoints() {
-        localStorage.setItem("checkpoints", JSON.stringify(this.checkpoints));
-        localStorage.setItem("total", JSON.stringify(this.total));
+    saveRecce() {
+        localStorage.setItem("recce", JSON.stringify(this.recce));
     }
 
     removeTarget() {
@@ -37,21 +42,21 @@ class RacePlan {
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
-            cp.targetsplit = ""
-            cp.targetEPH = ""
-            cp.targeteffort = ""
+            cp.target = { effort: "", split: "", EPH: "" }
         }
         this.saveCheckpoints()
     }  
 
     reset() {
         this.checkpoints = [];
-        this.total = { dist: 0, elev: 0, EP: 0 }
-        this.target = { rt: "", EPH: "" }
+        this.total = { dist: 0, elev: 0, EP: 0 };
+        this.target = { rt: "", EPH: "" };
+        this.recce = { rt: "", EPH: "" };
 
         localStorage.removeItem("checkpoints");
         localStorage.removeItem("total");
         localStorage.removeItem("target");
+        localStorage.removeItem("recce");
     }    
 
     // Target
@@ -64,9 +69,9 @@ class RacePlan {
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i];
             const mins = raceTime.allocateMinutes(this.target.rt, cp.percentageEP);
-            cp.targetsplit = raceTime.minutesToTime(mins);
-            cp.targetEPH = raceTime.EPH(cp.EP, mins);
-            cp.targeteffort = cp.percentageEP;
+            cp.target.split = raceTime.minutesToTime(mins);
+            cp.target.EPH = raceTime.EPH(cp.EP, mins);
+            cp.target.effort = cp.percentageEP;
         };
 
         // save target and checkpoints
@@ -78,13 +83,13 @@ class RacePlan {
         // adjust target split & split EPH
         const cp = this.checkpoints[i];
         const mins = raceTime.timeToMinutes(split)
-        cp.targetsplit = split;
-        cp.targetEPH = raceTime.EPH(cp.EP, mins);
+        cp.target.split = split;
+        cp.target.EPH = raceTime.EPH(cp.EP, mins);
 
         // adjust total target race time & avg EPH
         let totalmins = 0;
         for (let k = 1; k < this.checkpoints.length; k++) {
-            totalmins += raceTime.timeToMinutes(this.checkpoints[k].targetsplit);
+            totalmins += raceTime.timeToMinutes(this.checkpoints[k].target.split);
         };
         this.target.rt = raceTime.minutesToTime(totalmins);
         this.target.EPH = raceTime.EPH(this.total.EP, totalmins);
@@ -92,11 +97,47 @@ class RacePlan {
         // adjust target effort(%)
         for (let k = 1; k < this.checkpoints.length; k++) {
             const checkpointK =  this.checkpoints[k]
-            checkpointK.targeteffort = raceTime.timeToMinutes(checkpointK.targetsplit) / totalmins
+            checkpointK.target.effort = raceTime.timeToMinutes(checkpointK.target.split) / totalmins
         }
 
         // save target and checkpoints
         this.saveTarget();
+        this.saveCheckpoints();
+    }
+
+    reccordRecce(i, split){
+        // record recce split & split EPH
+        const cp = this.checkpoints[i];
+        const mins = raceTime.timeToMinutes(split)
+        cp.recce.split = split;
+        cp.recce.EPH = raceTime.EPH(cp.EP, mins);
+
+        // check if full recce is done
+        let fullRecce = true;
+        let totalmins = 0;
+
+        for (let k = 1; k < this.checkpoints.length; k++) {
+            const s = this.checkpoints[k].recce.split
+            if (s == "") {
+                fullRecce = false
+                break;
+            }
+            totalmins += raceTime.timeToMinutes(s);
+        };
+
+        // if full recce is made, adjust total recce race time & avg EPH, as well as split recce effort(%)
+        if (fullRecce) {
+            this.recce.rt = raceTime.minutesToTime(totalmins);
+            this.recce.EPH = raceTime.EPH(this.total.EP, totalmins);
+
+            for (let k = 1; k < this.checkpoints.length; k++) {
+                const checkpointK =  this.checkpoints[k]
+                checkpointK.recce.effort = raceTime.timeToMinutes(checkpointK.recce.split) / totalmins
+            }
+        }
+
+        // save target and checkpoints
+        this.saveRecce();
         this.saveCheckpoints();
     }
 
@@ -191,7 +232,7 @@ class RacePlan {
 
         // has input data
         tb.innerHTML = ''
-        tb.insertRow().innerHTML = `<td>${this.prefixedName(0)}</td>`+"<td>-</td>".repeat(9)
+        tb.insertRow().innerHTML = `<td>${this.prefixedName(0)}</td>`+"<td>-</td>".repeat(10)
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
@@ -202,11 +243,12 @@ class RacePlan {
                 <td>${displayFigure(cp.dist, 1)}</td>
                 <td>${cp.elev}</td>
                 <td>${displayFigure(cp.EP, 1)}</td>
-                <td>${displayTarget(cp.targeteffort*100, 0)}</td>
                 <td>${displayFigure(cp.percentageEP*100, 0)}</td>
-                <td>${displayTarget(cp.targetsplit, -1)}</td>
+                <td>${displayTarget(cp.target.effort*100, 0)}</td>
                 <td>-</td>
-                <td>${displayTarget(cp.targetEPH, 2)}</td>
+                <td>${displayTarget(cp.target.split, -1)}</td>
+                <td>-</td>
+                <td>${displayTarget(cp.target.EPH, 2)}</td>
                 <td>-</td>
             `
         }
@@ -217,8 +259,9 @@ class RacePlan {
                 <td>${displayFigure(this.total.dist, 1)}</td>
                 <td>${this.total.elev}</td>
                 <td>${displayFigure(this.total.EP, 1)}</td>
-                <td>${this.target.rt ? 100 : "-"}</td>
                 <td>100</td>
+                <td>${this.target.rt ? "100" : "-"}</td>
+                <td>-</td>
                 <td>${displayTarget(this.target.rt, -1)}</td>
                 <td>-</td>
                 <td>${displayTarget(this.target.EPH, 2)}</td>

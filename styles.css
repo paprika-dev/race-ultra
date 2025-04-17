@@ -363,8 +363,8 @@ label[for="race-start"] {
 table td:nth-child(2),
 table td:nth-child(3),
 table td:nth-child(4),
-table td:nth-child(7),
-table td:nth-child(8)
+table td:nth-child(8),
+table td:nth-child(9)
 {
   background: var(--primary-pale);
 }

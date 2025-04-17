@@ -21,13 +21,16 @@ document.addEventListener("touchstart", function(){}, true);
 
 // Load Data from Local Storage
 window.onload = (e) => {
-    const CPs = window.localStorage.getItem("checkpoints");
+    const checkpoints = window.localStorage.getItem("checkpoints");
     const total = window.localStorage.getItem("total");
     const target = window.localStorage.getItem("target");
+    const recce = window.localStorage.getItem("recce");
     
-    if (CPs) { raceUltra.checkpoints = JSON.parse(CPs) };
-    if (total) {raceUltra.total = JSON.parse(total) }
-    if (target) {raceUltra.target = JSON.parse(target) }
+    if (checkpoints) { raceUltra.checkpoints = JSON.parse(checkpoints) };
+    if (total) {raceUltra.total = JSON.parse(total) };
+    if (target) {raceUltra.target = JSON.parse(target) };
+    if (recce) {raceUltra.target = JSON.parse(recce) };
+
     raceUltra.render();
 }
 
