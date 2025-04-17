@@ -1,99 +1,6 @@
-document.addEventListener("touchstart", function(){}, true);
-
-function displayFigure(x, dp) {
-    return Number.parseFloat(x).toFixed(dp)
-}
-
-// UI show / hide
-
-function showView(viewId, btn) {
-    const views = document.querySelectorAll('.view');
-    views.forEach(view => view.classList.remove('active'));
-    document.getElementById(viewId).classList.add('active');
-
-    const navitems = document.querySelectorAll('.nav-item');
-    navitems.forEach(navitem => navitem.classList.remove('selected'));
-    navitems[btn].classList.add('selected');
-}
-
-function showForm(formId, btn) {
-    const forms = document.querySelectorAll('.cpinput');
-    forms.forEach(f => f.classList.remove('active'));
-    document.getElementById(formId).classList.add('active');
-
-    const formselections = document.querySelectorAll('.form-menu-item');
-    formselections.forEach(s => s.classList.remove('selected'));
-    formselections[btn].classList.add('selected');
-}
-
-// Race Planner
-
-const tb = document.getElementById('cptable-body');
-
-const formAddCP = document.getElementById('form-addcp');
-const inputName = formAddCP.querySelector('input[name="cpname"]');
-const inputDist = formAddCP.querySelector('input[name="cpdistance"]');
-const inputElev = formAddCP.querySelector('input[name="cpelevgain"]');
-const inputDistElev = document.getElementById('input-dist-elev');
-
-const formRemoveCP = document.getElementById('form-removecp');
-const btnRemoveCP = document.getElementById('btn-removecp');
-const btnReset = document.getElementById('btn-reset');
-
-const formTargetRT = document.getElementById('form-settargetrt');
-const inputTargetRT = formTargetRT.querySelector('input[name="rtTarget"]');
-const formTargetSplit = document.getElementById('form-settargetsplit');
-const inputTargetSplit = formTargetSplit.querySelector('input[name="splitTarget"]');
-
-const formRecce = document.getElementById('form-reccesplit');
-
-const splitSelections = document.getElementsByClassName('select-split');
-
-
-class Checkpoint {
-    constructor(name, dist, elev) {
-        this.name = name
-        this.dist = dist
-        this.elev = elev
-        this.EP = this.dist + this.elev * 0.01
-        this.targetsplit = "-"
-        this.targetEPH = "-"
-    }
-}
-
-class RaceTime {
-    isValidTime(input) {
-        // check if in hh:mm format
-        return /^\d{2}:[0-5][0-9]$/.test(input)
-    }
-
-    zeropad(num) {
-        return num.toString().padStart(2, '0')
-    }
-
-    timeToMinutes(timeStr) {
-        const [hours, minutes] = timeStr.split(':').map(Number);
-        return hours * 60 + minutes;
-    }
-
-    minutesToTime(mins) {
-        const hours = Math.floor(mins / 60);
-        const minutes = Math.round(mins % 60);
-        return `${this.zeropad(hours)}:${this.zeropad(minutes)}`;
-    }
-    
-    allocateMinutes(raceTime, percentage) {
-        return this.timeToMinutes(raceTime) * percentage
-    }
-
-    EPH(EP, mins){
-        return displayFigure(EP / mins * 60, 2)
-    }
-
-    timeDiff(time1, time2) {
-
-    }
-}
+import { tb, formAddCP, formTargetRT, formTargetSplit, splitSelections } from "./elements.js";
+import { raceTime } from "./raceTime.js";
+import { displayFigure } from "./functions.js";
 
 class RacePlan {
     constructor() {
@@ -217,24 +124,24 @@ class RacePlan {
     updateInputSection() {
         // checkpoint input
         if (this.checkpoints.length == 0) {
-            inputName.placeholder = "Starting Location";
-            inputDist.style.display = "none";
-            inputElev.style.display = "none";
-            inputDist.value = 0;
-            inputElev.value = 0;
+            formAddCP.inputName.placeholder = "Starting Location";
+            formAddCP.inputDist.style.display = "none";
+            formAddCP.inputElev.style.display = "none";
+            formAddCP.inputDist.value = 0;
+            formAddCP.inputElev.value = 0;
         } else {
-            inputName.placeholder = "Checkpoint Name";
-            inputDist.style.display = "block";
-            inputElev.style.display = "block";
+            formAddCP.inputName.placeholder = "Checkpoint Name";
+            formAddCP.inputDist.style.display = "block";
+            formAddCP.inputElev.style.display = "block";
         }
 
         if (this.target.rt == "") {
-            formTargetRT.reset();
-            formTargetSplit.style.display = "none"
+            formTargetRT.form.reset();
+            formTargetSplit.form.style.display = "none"
             
         } else {
-            inputTargetRT.value = this.target.rt
-            formTargetSplit.style.display = "block"
+            formTargetRT.input.value = this.target.rt
+            formTargetSplit.form.style.display = "block"
         }
     }
 
@@ -306,84 +213,4 @@ class RacePlan {
     }
 }
 
-
-// Race Ultra
-const raceUltra = new RacePlan();
-const raceTime = new RaceTime();
-
-window.onload = (e) => {
-    const CPs = window.localStorage.getItem("checkpoints");
-    const total = window.localStorage.getItem("total");
-    const target = window.localStorage.getItem("target");
-    
-    if (CPs) { raceUltra.checkpoints = JSON.parse(CPs) };
-    if (total) {raceUltra.total = JSON.parse(total) }
-    if (target) {raceUltra.target = JSON.parse(target) }
-    raceUltra.render();
-}
-
-// input view
-
-/// add CP
-formAddCP.addEventListener('submit', (e) => {
-    e.preventDefault();
-    cp = new Checkpoint(
-        inputName.value,
-        inputDist.valueAsNumber,
-        inputElev.valueAsNumber
-    )
-    raceUltra.addCheckpoint(cp);
-    raceUltra.render();
-    
-    formAddCP.reset();
-})
-
-/// remove CP
-btnRemoveCP.addEventListener('click', (e) => {
-    e.preventDefault();
-    let i = formRemoveCP.getElementsByTagName('select')[0].value
-    if (i != "") { raceUltra.removeCheckpoint(i) };
-    raceUltra.render();
-})
-
-btnReset.addEventListener('click', (e) => {
-    e.preventDefault();
-    raceUltra.reset();
-    raceUltra.render();
-})
-
-/// set target
-formTargetRT.addEventListener('submit', (e)=>{
-    e.preventDefault();
-
-    if (raceTime.isValidTime(inputTargetRT.value)) {
-        raceUltra.setTargetRT(inputTargetRT.value);
-        inputTargetRT.placeholder = "hh:mm";
-    } else {
-        formTargetRT.reset();
-        raceUltra.removeTarget();
-        inputTargetRT.placeholder = "hh:mm (please input in valid format)";
-    }
-
-    raceUltra.render();
-})
-
-formTargetSplit.addEventListener('submit', (e)=>{
-    e.preventDefault();
-
-    if (raceTime.isValidTime(inputTargetSplit.value)) {
-        let i = formTargetSplit.getElementsByTagName('select')[0].value
-        if (i != "") { raceUltra.adjustTargetSplit(i, inputTargetSplit.value) };
-        inputTargetSplit.placeholder = "hh:mm";
-        raceUltra.render();
-    } else {
-        inputTargetSplit.placeholder = "hh:mm (please input in valid format)";
-    }
-
-    formTargetSplit.reset();
-})
-
-// record recce
-formRecce.addEventListener('submit', (e)=>{
-    e.preventDefault();
-})
+export const raceUltra = new RacePlan();
