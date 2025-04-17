@@ -1,5 +1,3 @@
-import { displayFigure } from "./functions.js";
-
 class RaceTime {
     isValidTime(input) {
         // check if in hh:mm format
@@ -26,11 +24,7 @@ class RaceTime {
     }
 
     EPH(EP, mins){
-        return displayFigure(EP / mins * 60, 2)
-    }
-
-    timeDiff(time1, time2) {
-
+        return EP / mins * 60
     }
 }
 

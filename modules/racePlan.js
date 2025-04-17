@@ -1,6 +1,17 @@
 import { tb, formAddCP, formTargetRT, formTargetSplit, splitSelections } from "./elements.js";
 import { raceTime } from "./raceTime.js";
-import { displayFigure } from "./functions.js";
+
+function displayFigure(x, dp) {
+    return Number.parseFloat(x).toFixed(dp)
+}
+
+function displayTarget(x, dp) {
+    if (x) {
+        if (dp == -1) return x
+        return displayFigure(x, dp)
+    }
+    return "-"
+}
 
 class RacePlan {
     constructor() {
@@ -26,8 +37,9 @@ class RacePlan {
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
-            cp.targetsplit = "-"
-            cp.targetEPH = "-"
+            cp.targetsplit = ""
+            cp.targetEPH = ""
+            cp.targeteffort = ""
         }
         this.saveCheckpoints()
     }  
@@ -35,24 +47,26 @@ class RacePlan {
     reset() {
         this.checkpoints = [];
         this.total = { dist: 0, elev: 0, EP: 0 }
+        this.target = { rt: "", EPH: "" }
+
         localStorage.removeItem("checkpoints");
         localStorage.removeItem("total");
-
-        this.removeTarget();
+        localStorage.removeItem("target");
     }    
 
     // Target
     setTargetRT(targetrt){
         // set target total race time & avg EPH
         this.target.rt = targetrt;
-        this.target.EPH = raceTime.EPH(this.total.EP, raceTime.timeToMinutes(this.target.rt))
+        this.target.EPH = raceTime.EPH(this.total.EP, raceTime.timeToMinutes(this.target.rt));
 
         // set target split, EPH & effort(%)
         for (let i = 1; i < this.checkpoints.length; i++) {
-            const cp = this.checkpoints[i]
-            const mins = raceTime.allocateMinutes(this.target.rt, cp.percentageEP)
-            cp.targetsplit = raceTime.minutesToTime(mins)
-            cp.targetEPH = raceTime.EPH(cp.EP, mins)
+            const cp = this.checkpoints[i];
+            const mins = raceTime.allocateMinutes(this.target.rt, cp.percentageEP);
+            cp.targetsplit = raceTime.minutesToTime(mins);
+            cp.targetEPH = raceTime.EPH(cp.EP, mins);
+            cp.targeteffort = cp.percentageEP;
         };
 
         // save target and checkpoints
@@ -62,17 +76,24 @@ class RacePlan {
 
     adjustTargetSplit(i, split){
         // adjust target split & split EPH
-        const cp = this.checkpoints[i]
+        const cp = this.checkpoints[i];
+        const mins = raceTime.timeToMinutes(split)
         cp.targetsplit = split;
-        cp.targetEPH = raceTime.EPH(cp.EP, raceTime.timeToMinutes(split))
+        cp.targetEPH = raceTime.EPH(cp.EP, mins);
 
         // adjust total target race time & avg EPH
-        let totalmins = 0
+        let totalmins = 0;
         for (let k = 1; k < this.checkpoints.length; k++) {
             totalmins += raceTime.timeToMinutes(this.checkpoints[k].targetsplit);
-        }
+        };
         this.target.rt = raceTime.minutesToTime(totalmins);
         this.target.EPH = raceTime.EPH(this.total.EP, totalmins);
+
+        // adjust target effort(%)
+        for (let k = 1; k < this.checkpoints.length; k++) {
+            const checkpointK =  this.checkpoints[k]
+            checkpointK.targeteffort = raceTime.timeToMinutes(checkpointK.targetsplit) / totalmins
+        }
 
         // save target and checkpoints
         this.saveTarget();
@@ -90,7 +111,7 @@ class RacePlan {
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
-            cp.percentageEP = cp.EP/this.total.EP
+            cp.percentageEP = cp.EP / this.total.EP
         };
     }
 
@@ -178,14 +199,14 @@ class RacePlan {
             tb.insertRow().innerHTML = 
             `
                 <td>${this.prefixedName(i)}</td>
-                <td>${cp.dist}</td>
+                <td>${displayFigure(cp.dist, 1)}</td>
                 <td>${cp.elev}</td>
                 <td>${displayFigure(cp.EP, 1)}</td>
+                <td>${displayTarget(cp.targeteffort*100, 0)}</td>
                 <td>${displayFigure(cp.percentageEP*100, 0)}</td>
+                <td>${displayTarget(cp.targetsplit, -1)}</td>
                 <td>-</td>
-                <td>${cp.targetsplit}</td>
-                <td>-</td>
-                <td>${cp.targetEPH}</td>
+                <td>${displayTarget(cp.targetEPH, 2)}</td>
                 <td>-</td>
             `
         }
@@ -196,11 +217,11 @@ class RacePlan {
                 <td>${displayFigure(this.total.dist, 1)}</td>
                 <td>${this.total.elev}</td>
                 <td>${displayFigure(this.total.EP, 1)}</td>
+                <td>${this.target.rt ? 100 : "-"}</td>
                 <td>100</td>
-                <td>100</td>
-                <td>${this.target.rt}</td>
+                <td>${displayTarget(this.target.rt, -1)}</td>
                 <td>-</td>
-                <td>${this.target.EPH}</td>
+                <td>${displayTarget(this.target.EPH, 2)}</td>
                 <td>-</td>
             `
     

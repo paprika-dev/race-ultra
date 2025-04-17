@@ -4,7 +4,8 @@ export class Checkpoint {
         this.dist = dist
         this.elev = elev
         this.EP = this.dist + this.elev * 0.01
-        this.targetsplit = "-"
-        this.targetEPH = "-"
+        this.targeteffort = ""
+        this.targetsplit = ""
+        this.targetEPH = ""
     }
 }
