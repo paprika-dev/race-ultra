@@ -120,7 +120,7 @@ formTargetSplit.form.addEventListener('submit', (e)=>{
         formTargetSplit.input.placeholder = "hh:mm (please input in valid format)";
     }
 
-    formTargetSplit.reset();
+    formTargetSplit.form.reset();
 })
 
 // record recce
