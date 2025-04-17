@@ -120,6 +120,7 @@ class RacePlan {
                 this.recce.fullRecce = false
                 break;
             }
+            this.recce.fullRecce = true
             totalmins += raceTime.timeToMinutes(s);
         };
 
