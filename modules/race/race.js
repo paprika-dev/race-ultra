@@ -14,7 +14,6 @@ class Race {
             buffer: "" 
         }
         this.projected = { nextarrival: "", rt: "" }
-        // this.pace = { lastsplit: "", target:"", projected: "", plan: "" }
     }
 
     prefixedName(i) {
@@ -27,7 +26,7 @@ class Race {
             default: 
                 prefix = "CP" + i + ": ";
         }
-        return prefix + this.checkpoints[i].name
+        return prefix + this.checkpoints[i].name;
     }
 
     calculateTotal() {
@@ -77,11 +76,22 @@ class Race {
         this.total = { dist: 0, elev: 0, EP: 0 };
         this.target = { rt: "", EPH: "" };
         this.recce = { rt: "", EPH: "", fullRecce: true };
+        this.actual = 
+        { 
+            started: false, 
+            finished: false, 
+            lastcheckpoint: 0, 
+            progress: 0, 
+            rt: "", 
+            buffer: "" 
+        }
+        this.projected = { nextarrival: "", rt: "" }
 
         localStorage.removeItem("checkpoints");
         localStorage.removeItem("total");
         localStorage.removeItem("target");
         localStorage.removeItem("recce");
+        localStorage.removeItem("actual");
     }    
 }
 

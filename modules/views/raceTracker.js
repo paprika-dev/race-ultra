@@ -1,10 +1,15 @@
-import { progressbar, dashboard, arrivalBtn } from "../utils/elements.js"
+import { 
+    progressbar, 
+    dashboard, 
+    arrivalBtn, 
+    infoBoxLastCP,
+    infoBoxNextCP
+} from "../utils/elements.js"
 import { race } from "../race/race.js"
 import { displayFigure } from "../utils/displayFigure.js";
 
 class RaceTracker {
     recordArrival(){
-        console.log(race.actual.started, race.actual.finished);
         if (!race.actual.started) {
             race.actual.started = true; // mark race start
         } else {
@@ -16,7 +21,6 @@ class RaceTracker {
                 race.actual.finished = true; // mark race finish
             } 
         }
-        console.log("af ", race.actual.started, race.actual.finished);
     }
 
     arrivalProjection(){
@@ -33,12 +37,42 @@ class RaceTracker {
         // dashboard.pace = race.pace.plan;
     }
 
-    updateLastCheckpoint() {
-
+    initializeInfoBox(box){
+        box.cpinfo.innerHTML = "EP | km | +m"
     }
 
-    updateNextCheckpoint(){
+    updateCheckpointInfoBox() {
+        // no CP input
+        if (race.checkpoints.length == 0) {
+            infoBoxLastCP.cpname.innerHTML = "Last CP";
+            infoBoxNextCP.cpname.innerHTML = "Next CP";
+            this.initializeInfoBox(infoBoxLastCP);
+            this.initializeInfoBox(infoBoxNextCP);
+            return
+        }
 
+        let i = race.actual.lastcheckpoint;
+
+        // last CP
+        if (race.checkpoints.length > 0) {
+            infoBoxLastCP.cpname.innerHTML = race.prefixedName(i);
+            infoBoxLastCP.cpinfo.innerHTML = 
+                `${race.checkpoints[i].EP} EP | 
+                 ${race.checkpoints[i].dist} km | 
+                 +${race.checkpoints[i].elev} m`
+        }
+
+        // next CP
+        if (race.actual.finished) {
+            infoBoxNextCP.cpname.innerHTML = "You have made it!"
+            this.initializeInfoBox(infoBoxNextCP);
+        } else if (race.checkpoints.length > 1) {
+            infoBoxNextCP.cpname.innerHTML = race.prefixedName(i+1);
+            infoBoxNextCP.cpinfo.innerHTML = 
+            `${race.checkpoints[i+1].EP} EP | 
+             ${race.checkpoints[i+1].dist} km | 
+             +${race.checkpoints[i+1].elev} m`
+        }
     }
     
     updateBtnText(){
@@ -51,9 +85,7 @@ class RaceTracker {
 
     render() {
         this.updateDashboard();
-        console.log('renderde')
-        // this.updateLastCheckpoint();
-        // this.updateNextCheckpoint();
+        this.updateCheckpointInfoBox();
         this.updateBtnText();
     }
 }

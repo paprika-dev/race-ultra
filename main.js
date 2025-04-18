@@ -82,6 +82,7 @@ formAddCP.form.addEventListener('submit', (e) => {
     )
     racePlan.addCheckpoint(cp);
     racePlan.render();
+    raceTracker.updateCheckpointInfoBox();
     
     formAddCP.form.reset();
 })
@@ -92,12 +93,14 @@ formRemoveCP.btnRemoveCP.addEventListener('click', (e) => {
     let i = formRemoveCP.splitSelecton.value
     if (i != "") { racePlan.removeCheckpoint(i) };
     racePlan.render();
+    raceTracker.updateCheckpointInfoBox();
 })
 
 formRemoveCP.btnReset.addEventListener('click', (e) => {
     e.preventDefault();
     race.reset();
     racePlan.render();
+    raceTracker.render();
 })
 
 /// set target

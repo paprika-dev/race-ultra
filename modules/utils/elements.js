@@ -67,6 +67,19 @@ export const dashboard = {
     pace: metrics[4]
 }
 
+const checkpointInfoBoxes = document.getElementsByClassName('checkpoint');
+let [box1, box2] = checkpointInfoBoxes;
+
+export const infoBoxLastCP = {
+    cpname: box1.querySelector('.cp-name'),
+    cpinfo: box1.querySelector('.cp-info')
+} 
+
+export const infoBoxNextCP = {
+    cpname: box2.querySelector('.cp-name'),
+    cpinfo: box2.querySelector('.cp-info')
+} 
+
 export const arrivalBtn =  document.getElementById('arrival-btn')
 
 

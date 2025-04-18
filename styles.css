@@ -215,7 +215,7 @@ main {
     border-radius: var(--border-radius);
 }
 
-.current-cp {
+.last-cp {
     transform: scale(0.88);
     margin-bottom: 0.5rem;
 }
@@ -224,7 +224,7 @@ main {
     margin-bottom: 0.85rem;
 }
 
-.current-cp:active {
+.last-cp:active {
     transform: scale(0.83);
   }
 
