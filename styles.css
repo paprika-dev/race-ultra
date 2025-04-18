@@ -204,7 +204,8 @@ main {
 
 .metric-figure, #arrival-time {
     font-weight: 600;
-    font-family: verdana;
+    font-family: Tahoma;
+    /* font-family: verdana; */
     color: #303D3A;
 }
 
