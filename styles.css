@@ -2,6 +2,7 @@
     --primary: #36bc9d;
     --secondary: #f97c4c;
     --trivial: #aabbb7cb;
+    --primary-grey: #7cb4a7;
     --primary-pale: #36bc9d22;
     --background: #f5f5f5;
     --metric-bg: #f0f1ff;
@@ -172,16 +173,22 @@ main {
 
 .metric-header {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 0.3rem;
     margin-bottom: 0.5rem;
-    color: var(--trivial);
 }
-.metric-name {
-    font-size: 0.75rem;
-    /* line-height: 0.8rem; */
-    /* margin-top: 0.2rem; */
+
+.metric-header i, .special {
+    font-size: 1.1rem;
 }
+
+.metric-name, .lastsplitEPH {
+    font-size: 0.65rem;
+    color: var(--primary-grey);
+    font-family: monospace;
+    font-style: italic;
+}
+
 
 .metric-figure {
     font-size: 1.5rem;
@@ -210,6 +217,7 @@ main {
     gap: 0.3rem 0.5rem;
     font-size: 0.65rem;
     font-family: monospace;
+    align-items: baseline;
 }
 
 .checkpoints{
