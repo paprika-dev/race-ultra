@@ -273,7 +273,7 @@ main {
     padding: 0 1rem;
 }
 
-#arrival-btn, .genreport-btn {
+#arrival-btn, .genreport-btn, #resetrace-btn {
     margin-top: 0.5rem;
     background-color: var(--primary);
     border: none;
@@ -283,6 +283,11 @@ main {
     border-radius: var(--border-radius);
     padding: 0.7rem 1rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+}
+
+#resetrace-btn {
+    display: none;
+    background-color: var(--secondary);
 }
 
 .cpinput {

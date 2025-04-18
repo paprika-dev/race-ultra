@@ -81,5 +81,6 @@ export const infoBoxNextCP = {
 } 
 
 export const arrivalBtn =  document.getElementById('arrival-btn')
+export const resetraceBtn =  document.getElementById('resetrace-btn')
 
 

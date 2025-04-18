@@ -2,6 +2,7 @@ import {
     progressbar, 
     dashboard, 
     arrivalBtn, 
+    resetraceBtn,
     infoBoxLastCP,
     infoBoxNextCP
 } from "../utils/elements.js"
@@ -19,6 +20,7 @@ class RaceTracker {
 
             if (race.actual.lastcheckpoint + 1 == race.checkpoints.length) {
                 race.actual.finished = true; // mark race finish
+                resetraceBtn.style.display = 'block';
             } 
         }
     }
@@ -26,6 +28,19 @@ class RaceTracker {
     arrivalProjection(){
         // this.rt.projected = 
         // this.checkpoints = 
+    }
+
+    resetRace(){
+        race.actual = 
+        { 
+            started: false, 
+            finished: false, 
+            lastcheckpoint: 0, 
+            progress: 0, 
+            rt: "", 
+            buffer: "" 
+        }
+        resetraceBtn.style.display = 'none'
     }
 
     // Rendering

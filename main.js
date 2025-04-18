@@ -9,7 +9,8 @@ import {
     formTargetRT, 
     formTargetSplit,
     formRecce,
-    arrivalBtn
+    arrivalBtn,
+    resetraceBtn
 
 } from "./modules/utils/elements.js";
 import { showForm, showView } from "./modules/ui/menu.js";
@@ -159,8 +160,15 @@ formRecce.form.addEventListener('submit', (e)=>{
 arrivalBtn.addEventListener('click', (e)=>{
     e.preventDefault();
 
-    if (!race.actual.finished) {
+    if (!race.actual.finished && race.checkpoints.length >= 2) {
         raceTracker.recordArrival();
         raceTracker.render();
     } 
+})
+
+resetraceBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+
+    raceTracker.resetRace();
+    raceTracker.render();
 })
