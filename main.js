@@ -156,6 +156,8 @@ formRecce.form.addEventListener('submit', (e)=>{
 arrivalBtn.addEventListener('click', (e)=>{
     e.preventDefault();
 
-    raceTracker.recordArrival();
-    raceTracker.render();
+    if (!race.actual.finished) {
+        raceTracker.recordArrival();
+        raceTracker.render();
+    } 
 })

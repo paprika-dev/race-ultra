@@ -132,7 +132,7 @@ main {
 
 .myprogress-bar {
     height: 100%;
-    width: 25%;
+    width: 0;
     background-color: var(--primary);
     border-radius: var(--border-radius);
   }
@@ -320,7 +320,7 @@ label[for="race-start"] {
     margin-right: 1rem;
 }
 
-.input-btn i, .remove-btn i {
+.input-btn i, .remove-btn i, #arrival-btn i{
     color: white;
 }
 
