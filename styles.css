@@ -1,6 +1,7 @@
 :root {
     --primary: #36bc9d;
-    --secondary: #f97c4c;
+    --secondary: #ff7b47;
+    /* --secondary: rgb(255, 114, 58); */
     --trivial: #aabbb7cb;
     --primary-grey: #7cb4a7;
     --primary-pale: #36bc9d22;
@@ -191,10 +192,20 @@ main {
 
 
 .metric-figure {
-    font-size: 1.5rem;
-    line-height: 1.5rem;
-    font-weight: 600;
+    /* font-size: 1.5rem;
+    line-height: 1.5rem; */
     margin-top: 0.8rem;
+
+    font-size: 1.3rem;
+    line-height: 1.3rem;
+
+}
+
+
+.metric-figure, #arrival-time {
+    font-weight: 600;
+    font-family: verdana;
+    color: #303D3A;
 }
 
 .buffer-gap {
