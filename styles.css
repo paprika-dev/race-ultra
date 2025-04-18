@@ -170,13 +170,22 @@ main {
     touch-action: manipulation;
 }
 
+.metric-header {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+    color: var(--trivial);
+}
 .metric-name {
-    font-size: 0.8rem;
-    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    /* line-height: 0.8rem; */
+    /* margin-top: 0.2rem; */
 }
 
 .metric-figure {
     font-size: 1.5rem;
+    line-height: 1.5rem;
     font-weight: 600;
     margin-top: 0.8rem;
 }
@@ -221,7 +230,7 @@ main {
 }
 
 .next-cp {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
 }
 
 .last-cp:active {
