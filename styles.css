@@ -146,7 +146,7 @@ main {
 
 .metrics {
     background-color: var(--metric-bg);
-    padding: 1rem;
+    padding: 0.85rem;
     border-radius: var(--border-radius);
     margin-bottom: 0.6rem;
 }
@@ -160,7 +160,7 @@ main {
 .metric {
     background: white;
     border-radius: var(--border-radius);
-    padding: 0.85rem;
+    padding: 0.83rem;
     transition: transform 0.2s;
     /* display: flex;
     flex-direction: column;
@@ -196,16 +196,14 @@ main {
     line-height: 1.5rem; */
     margin-top: 0.8rem;
 
-    font-size: 1.5rem;
-    line-height: 1.5rem;
-
+    font-size: 1.37rem;
+    line-height: 1.37rem;
 }
 
 
 .metric-figure, #arrival-time {
     font-weight: 600;
-    font-family: Tahoma;
-    /* font-family: verdana; */
+    font-family: verdana;
     color: #303D3A;
 }
 
