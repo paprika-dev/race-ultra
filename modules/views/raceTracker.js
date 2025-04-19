@@ -72,7 +72,7 @@ class RaceTracker {
         if (race.checkpoints.length > 0) {
             infoBoxLastCP.cpname.innerHTML = race.prefixedName(i);
             infoBoxLastCP.cpinfo.innerHTML = 
-                `${race.checkpoints[i].EP} EP | 
+                `${displayFigure(race.checkpoints[i].EP, 1)} EP | 
                  ${race.checkpoints[i].dist} km | 
                  +${race.checkpoints[i].elev} m`
         }
@@ -84,7 +84,7 @@ class RaceTracker {
         } else if (race.checkpoints.length > 1) {
             infoBoxNextCP.cpname.innerHTML = race.prefixedName(i+1);
             infoBoxNextCP.cpinfo.innerHTML = 
-            `${race.checkpoints[i+1].EP} EP | 
+            `${displayFigure(race.checkpoints[i+1].EP, 1)} EP | 
              ${race.checkpoints[i+1].dist} km | 
              +${race.checkpoints[i+1].elev} m`
         }

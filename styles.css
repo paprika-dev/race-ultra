@@ -203,8 +203,12 @@ main {
 }
 
 
-.metric-figure, #arrival-time {
+.metric-figure {
     font-weight: 700;
+}
+
+#arrival-time{
+    color: var(--trivial);
 }
 
 .buffer-gap {
@@ -292,18 +296,16 @@ main {
 }
 
 .cp-header, .next-cp .cp-metric-figure {
-    font-weight: 500;
-}
-
-
-.next-cp .cp-header {
-    color: var(--primary-grey);
+    font-weight: 600;
 }
 
 .buffer-gap {
     font-weight: 700;
 }
 
+.next-cp .cp-header {
+    color: var(--primary-grey);
+}
 
 .cp-info {
     font-size: 0.78rem;
@@ -311,7 +313,7 @@ main {
 
 .cp-metric-name {
     color: var(--trivial);
-    font-size: 0.85rem;
+    font-size: 0.65rem;
     padding: 0 1rem;
 }
 
