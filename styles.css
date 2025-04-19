@@ -1,11 +1,11 @@
 :root {
     --primary: #36bc9d;
     --secondary: #ff7b47;
-    --trivial: #aabbb7cb;
     --primary-grey: #7cb4a7;
     --primary-pale: #36bc9d22;
     --primary-dark: #303D3A;
-    --metric-bg: #f0f1ff;
+    --trivial: #aabbb7cb;
+    --container-bg: #f0f1ff;
     --border-radius: 12px;
     --safe-area-inset-top: env(safe-area-inset-top);
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
@@ -86,10 +86,6 @@ button:active {
     transform: scale(0.95);
 }
 
-.last-cp {
-    transform: scale(0.88);
-}
-
 .last-cp:active {
     transform: scale(0.83);
 }
@@ -142,6 +138,10 @@ label[for="race-start"] {
     margin-right: 1rem;
 }
 
+#race-start {
+    font-weight: 600;
+}
+
     /* Form Menu */
 .form-menu {
     display: grid;
@@ -177,7 +177,7 @@ label[for="race-start"] {
     /* Input Forms */
 .race-start-container,
 .cpinput {
-    background-color: var(--metric-bg);
+    background-color: var(--container-bg);
     padding: 1rem;
     border-radius: var(--border-radius);
     margin-bottom: 1rem;
@@ -263,7 +263,7 @@ table {
 
     /* Metric Dashboard */
 .metrics {
-    background-color: var(--metric-bg);
+    background-color: var(--container-bg);
     padding: 0.85rem;
     border-radius: var(--border-radius);
     margin-bottom: 0.6rem;
@@ -309,8 +309,12 @@ table {
 
     /* buffer */
 .buffer-gap {
-    color: var(--secondary);
+    color: var(--primary);
     font-weight: 900;
+}
+
+.buffer-gap.negative {
+    color: var(--secondary);
 }
 
     /* EPH comparison */
@@ -339,24 +343,21 @@ table {
     border-radius: var(--border-radius);
 }
 
-.last-cp {
-    margin-bottom: 0.5rem;
-}
-
-.next-cp {
-    margin-bottom: 1.5rem;
-}
-
 .cp-header {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: end;
+    font-weight: 600;
 }
 
 .cp-header-left {
     display: flex;
     gap: 0.4rem;
+}
+
+.cp-info {
+    font-size: 0.78rem;
 }
 
 .cp-divider {
@@ -384,17 +385,23 @@ table {
     font-size: 0.65rem;
 }
 
-.cp-info {
-    font-size: 0.78rem;
+    /* Adjustment for Last Checkpoint InfoBox */
+.last-cp {
+    transform: scale(0.88);
+    margin-bottom: 0.5rem;
 }
 
-.cp-header, 
-.next-cp .cp-metric-figure {
-    font-weight: 600;
+    /* Adjustment for Next Checkpoint InfoBox */
+.next-cp {
+    margin-bottom: 1.5rem;
 }
 
 .next-cp .cp-header {
     color: var(--primary-grey);
+}
+
+.next-cp .cp-metric-figure {
+    font-weight: 600;
 }
 
     /* arrival */

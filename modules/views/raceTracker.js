@@ -1,18 +1,22 @@
 import { 
     progressbar, 
     dashboard, 
-    arrivalBtn, 
+    arrival,
     resetraceBtn,
     infoBoxLastCP,
     infoBoxNextCP
 } from "../utils/elements.js"
 import { race } from "../race/race.js"
 import { displayFigure } from "../utils/displayFigure.js";
+import { RaceTime } from "../utils/raceTime.js";
 
 class RaceTracker {
     recordArrival(){
+        const arrivaltime = arrival.timeInput.value;
+
         if (!race.actual.started) {
             race.actual.started = true; // mark race start
+            race.checkpoints[0].arrival = arrivaltime; // mark race start
         } else {
             race.actual.lastcheckpoint += 1;
             let i = race.actual.lastcheckpoint;
@@ -44,8 +48,13 @@ class RaceTracker {
     }
 
     // Rendering
+    updateTargetTime() {
+        dashboard.rttarget.innerHTML = RaceTime.minutesToTime(race.target.rt);
+    }
+
     updateDashboard() {
         progressbar.style.width = `${displayFigure(race.actual.progress * 100, 2)}%`;
+        this.updateTargetTime();
         // dashboard.rtpassed.innerHTML = race.actual.rt;
         // dashboard.rtprojected = race.projected.rt;
         // dashboard.buffer = race.actual.buffer;
@@ -73,7 +82,7 @@ class RaceTracker {
             infoBoxLastCP.cpname.innerHTML = race.prefixedName(i);
             infoBoxLastCP.cpinfo.innerHTML = 
                 `${displayFigure(race.checkpoints[i].EP, 1)} EP | 
-                 ${race.checkpoints[i].dist} km | 
+                 ${displayFigure(race.checkpoints[i].dist, 1)} km | 
                  +${race.checkpoints[i].elev} m`
         }
 
@@ -85,13 +94,13 @@ class RaceTracker {
             infoBoxNextCP.cpname.innerHTML = race.prefixedName(i+1);
             infoBoxNextCP.cpinfo.innerHTML = 
             `${displayFigure(race.checkpoints[i+1].EP, 1)} EP | 
-             ${race.checkpoints[i+1].dist} km | 
+             ${displayFigure(race.checkpoints[i+1].dist, 1)} km | 
              +${race.checkpoints[i+1].elev} m`
         }
     }
     
     updateBtnText(){
-        arrivalBtn.innerHTML = race.actual.finished ? 
+        arrival.btn.innerHTML = race.actual.finished ? 
             `<i class="bi bi-award-fill"></i> Congratulations!` : (race.actual.started ?
                 `<i class="bi bi-bookmark-star-fill"></i> Arrived at ${race.prefixedName(race.actual.lastcheckpoint + 1)}` : 
                 `<i class="bi bi-flag-fill"></i> Start`

@@ -20,15 +20,14 @@ class RacePlan {
     // Target
     setTargetRT(targetrt){
         // set target total race time & avg EPH
-        race.target.rt = targetrt;
-        race.target.EPH = RaceTime.EPH(race.total.EP, RaceTime.timeToMinutes(race.target.rt));
+        race.target.rt = RaceTime.timeToMinutes(targetrt);
+        race.target.EPH = RaceTime.EPH(race.total.EP, race.target.rt);
 
         // set target split, EPH & effort(%)
         for (let i = 1; i < race.checkpoints.length; i++) {
             const cp = race.checkpoints[i];
-            const mins = RaceTime.allocateMinutes(race.target.rt, cp.percentageEP);
-            cp.target.split = RaceTime.minutesToTime(mins);
-            cp.target.EPH = RaceTime.EPH(cp.EP, mins);
+            cp.target.split = race.target.rt * cp.percentageEP;
+            cp.target.EPH = RaceTime.EPH(cp.EP, cp.target.split);
             cp.target.effort = cp.percentageEP;
         };
 
@@ -40,22 +39,21 @@ class RacePlan {
     adjustTargetSplit(i, split){
         // adjust target split & split EPH
         const cp = race.checkpoints[i];
-        const mins = RaceTime.timeToMinutes(split)
-        cp.target.split = split;
-        cp.target.EPH = RaceTime.EPH(cp.EP, mins);
+        cp.target.split = RaceTime.timeToMinutes(split);
+        cp.target.EPH = RaceTime.EPH(cp.EP, cp.target.split);
 
         // adjust total target race time & avg EPH
         let totalmins = 0;
         for (let k = 1; k < race.checkpoints.length; k++) {
-            totalmins += RaceTime.timeToMinutes(race.checkpoints[k].target.split);
+            totalmins += race.checkpoints[k].target.split;
         };
-        race.target.rt = RaceTime.minutesToTime(totalmins);
-        race.target.EPH = RaceTime.EPH(race.total.EP, totalmins);
+        race.target.rt = totalmins;
+        race.target.EPH = RaceTime.EPH(race.total.EP, race.target.rt);
 
         // adjust target effort(%)
         for (let k = 1; k < race.checkpoints.length; k++) {
             const checkpointK =  race.checkpoints[k]
-            checkpointK.target.effort = RaceTime.timeToMinutes(checkpointK.target.split) / totalmins
+            checkpointK.target.effort = checkpointK.target.split / race.target.rt
         }
 
         // save target and checkpoints
@@ -67,9 +65,8 @@ class RacePlan {
     reccordRecce(i, split){
         // record recce split & split EPH
         const cp = race.checkpoints[i];
-        const mins = RaceTime.timeToMinutes(split)
-        cp.recce.split = split;
-        cp.recce.EPH = RaceTime.EPH(cp.EP, mins);
+        cp.recce.split = RaceTime.timeToMinutes(split);
+        cp.recce.EPH = RaceTime.EPH(cp.EP, cp.recce.split);
 
         // check if full recce is done
         let totalmins = 0;
@@ -80,17 +77,17 @@ class RacePlan {
                 break;
             }
             race.recce.fullRecce = true
-            totalmins += RaceTime.timeToMinutes(s);
+            totalmins += s;
         };
 
         // if full recce is made, adjust total recce race time & avg EPH, as well as split recce effort(%)
         if (race.recce.fullRecce) {
-            race.recce.rt = RaceTime.minutesToTime(totalmins);
-            race.recce.EPH = RaceTime.EPH(race.total.EP, totalmins);
+            race.recce.rt = totalmins;
+            race.recce.EPH = RaceTime.EPH(race.total.EP, race.recce.rt);
 
             for (let k = 1; k < race.checkpoints.length; k++) {
                 const checkpointK =  race.checkpoints[k]
-                checkpointK.recce.effort = RaceTime.timeToMinutes(checkpointK.recce.split) / totalmins
+                checkpointK.recce.effort = checkpointK.recce.split / race.recce.rt
             }
         }
 
@@ -119,7 +116,7 @@ class RacePlan {
             formTargetSplit.form.style.display = "none"
             
         } else {
-            formTargetRT.input.value = race.target.rt
+            formTargetRT.input.value = RaceTime.minutesToTime(race.target.rt)
             formTargetSplit.form.style.display = "block"
         }
     }
@@ -163,8 +160,8 @@ class RacePlan {
                 <td>${displayFigure(cp.percentageEP*100, 0)}</td>
                 <td>${displayEffort(cp.target.effort*100, 0)}</td>
                 <td>${displayEffort(cp.recce.effort*100, 0)}</td>
-                <td>${displayEffort(cp.target.split, -1)}</td>
-                <td>${displayEffort(cp.recce.split, -1)}</td>
+                <td>${RaceTime.minutesToTime(cp.target.split)}</td>
+                <td>${RaceTime.minutesToTime(cp.recce.split)}</td>
                 <td>${displayEffort(cp.target.EPH, 2)}</td>
                 <td>${displayEffort(cp.recce.EPH, 2)}</td>
             `
@@ -179,8 +176,8 @@ class RacePlan {
                 <td>100</td>
                 <td>${race.target.rt ? "100" : "-"}</td>
                 <td>${race.recce.rt ? "100" : "-"}</td>
-                <td>${displayEffort(race.target.rt, -1)}</td>
-                <td>${displayEffort(race.recce.rt, -1)}</td>
+                <td>${RaceTime.minutesToTime(race.target.rt)}</td>
+                <td>${RaceTime.minutesToTime(race.recce.rt)}</td>
                 <td>${displayEffort(race.target.EPH, 2)}</td>
                 <td>${displayEffort(race.recce.EPH, 2)}</td>
             `

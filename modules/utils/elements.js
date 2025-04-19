@@ -80,7 +80,10 @@ export const infoBoxNextCP = {
     cpinfo: box2.querySelector('.cp-info')
 } 
 
-export const arrivalBtn =  document.getElementById('arrival-btn')
+export const arrival = {
+    timeInput: document.getElementById('arrival-time'),
+    btn:document.getElementById('arrival-btn')
+}
 export const resetraceBtn =  document.getElementById('resetrace-btn')
 
 

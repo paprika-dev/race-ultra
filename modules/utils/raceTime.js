@@ -14,13 +14,10 @@ export class RaceTime {
     }
 
     static minutesToTime(mins) {
+        if (!mins) return "--:--"
         const hours = Math.floor(mins / 60);
         const minutes = Math.round(mins % 60);
         return `${RaceTime.zeropad(hours)}:${RaceTime.zeropad(minutes)}`;
-    }
-    
-    static allocateMinutes(raceTime, percentage) {
-        return RaceTime.timeToMinutes(raceTime) * percentage
     }
 
     static EPH(EP, mins){

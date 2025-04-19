@@ -9,7 +9,7 @@ import {
     formTargetRT, 
     formTargetSplit,
     formRecce,
-    arrivalBtn,
+    arrival,
     resetraceBtn
 
 } from "./modules/utils/elements.js";
@@ -118,11 +118,12 @@ formTargetRT.form.addEventListener('submit', (e)=>{
     }
 
     racePlan.render();
+    raceTracker.updateTargetTime();
 })
 
 formTargetSplit.splitSelecton.addEventListener('change', (e)=>{
     const i = formTargetSplit.splitSelecton.value;
-    formTargetSplit.input.value = race.checkpoints[i].target.split;
+    formTargetSplit.input.value = RaceTime.minutesToTime(race.checkpoints[i].target.split);
 })
 
 formTargetSplit.form.addEventListener('submit', (e)=>{
@@ -157,7 +158,7 @@ formRecce.form.addEventListener('submit', (e)=>{
 })
 
 // tracker view
-arrivalBtn.addEventListener('click', (e)=>{
+arrival.btn.addEventListener('click', (e)=>{
     e.preventDefault();
 
     if (!race.actual.finished && race.checkpoints.length >= 2) {

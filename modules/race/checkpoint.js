@@ -7,7 +7,7 @@ export class Checkpoint {
         this.percentageEP = 0
         this.target = { effort: "", split: "", EPH: "" }
         this.recce = { effort: "", split: "", EPH: "" }
-        this.actual = { effort: "", split: "", EPH: "", buffer: "" }
+        this.actual = { arrival: "", effort: "", split: "", EPH: "", buffer: ""}
     }
 }
 
