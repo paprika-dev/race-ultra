@@ -89,7 +89,7 @@ class RaceTracker {
                  +${race.checkpoints[i].elev} m`
 
             let a = race.checkpoints[i].target.arrival
-            infoBoxLastCP.targetArrival.innerHTML = (a[0] || "--:--") + (a[1] ? `<sup>${a[1]}</sup>` : "");
+            infoBoxLastCP.targetArrival.innerHTML = (a[0] || "--:--") + (a[1] ? ` <sup>+${a[1]}d</sup>` : "");
         }
 
         // next CP
