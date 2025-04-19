@@ -1,67 +1,31 @@
 :root {
     --primary: #36bc9d;
     --secondary: #ff7b47;
-    /* --secondary: rgb(255, 114, 58); */
     --trivial: #aabbb7cb;
     --primary-grey: #7cb4a7;
     --primary-pale: #36bc9d22;
     --primary-dark: #303D3A;
-    --background: #f5f5f5;
     --metric-bg: #f0f1ff;
-    --text: #333;
-    --card-bg: #ffffff;
     --border-radius: 12px;
     --safe-area-inset-top: env(safe-area-inset-top);
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
     --max-width: 30rem;
+    --font-medium: 0.85rem;
   }
 
-button {
-    border: none;
-    background: transparent;
-    transition: transform 0.2s;
-}
-
-/* view switch, form switch */
-.view, .cpinput {
-    display: none;
-}
-
-.active {
-    display: block;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-
-.trivial {
-    color: var(--trivial);
-}
-
-.note {
-    font-size: 0.7rem;
-    font-style: italic;
-}
-
-p {
-    margin: 0 !important;
-}
-
-i {
-    color: var(--primary);
-}
-
-* {
+  * {
     box-sizing: border-box;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -webkit-tap-highlight-color: transparent;
+}
+
+main {
+    padding: 1rem;
+    height: 90vh;
+    overflow: scroll;
 }
 
 body {
@@ -75,11 +39,67 @@ body {
     color: var(--primary-dark);
 }
 
-table {
-    font-size: 0.85rem;
+p {
+    margin: 0 !important;
 }
 
+i {
+    color: var(--primary);
+}
 
+button {
+    border: none;
+    background: transparent;
+    color: white;
+    border-radius: var(--border-radius);
+}
+
+button i {
+    color: white;
+}
+
+.trivial {
+    color: var(--trivial);
+}
+
+ /* || Show and Hide UI */
+.view, 
+.cpinput,
+#resetrace-btn {
+    display: none;
+}
+
+.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* || Press and Squeeze Effect */
+.metric:active,  
+.next-cp:active,
+button:active {
+    transform: scale(0.95);
+}
+
+.last-cp {
+    transform: scale(0.88);
+}
+
+.last-cp:active {
+    transform: scale(0.83);
+}
+
+.metric, 
+.checkpoint, button {
+    transition: transform 0.2s;
+}
+
+/* || View Menu */
 nav {
     position: fixed;
     bottom: var(--safe-area-inset-bottom);
@@ -94,7 +114,6 @@ nav {
     box-shadow: 0 -2px 6px rgba(0,0,0,0.09);
 }
 
-
 .nav-item {
     display: flex;
     flex-direction: column;
@@ -106,25 +125,126 @@ nav {
     font-size: 1.3rem;
 }
 
-
-
 .nav-item-name {
-    font-size: 0.85rem;
+    font-size: var(--font-medium);
 }
 
-
-.selected.nav-item label, .selected.nav-item i {
+.selected.nav-item label, 
+.selected.nav-item i {
     color: var(--primary);
 }
 
+/* || View 1: Race Plan */
 
-
-main {
-    padding: 1rem;
-    height: 90vh;
-    overflow: scroll;
+    /* Race Start */
+label[for="race-start"] {
+    font-weight: 600;
+    margin-right: 1rem;
 }
 
+    /* Form Menu */
+.form-menu {
+    display: grid;
+    grid-template-columns: 3fr 4fr;
+    gap: 0.8rem;
+}
+
+
+.form-menu-item {
+    color: var(--trivial);
+    font-size: var(--font-medium);
+    line-height: var(--font-medium);
+    text-align: left;
+    border: 1px solid var(--trivial);
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.form-menu-item i {
+    color: var(--trivial);
+}
+
+.selected.form-menu-item {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.selected.form-menu-item i {
+    color: var(--primary);
+}
+
+    /* Input Forms */
+.race-start-container,
+.cpinput {
+    background-color: var(--metric-bg);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+.input-btn, 
+.remove-btn {
+    font-size: 1rem;
+    font-weight: 900;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+    width: 100%;
+}
+
+.input-btn {
+    background-color: var(--primary);
+}
+
+.remove-btn {
+    background-color: var(--secondary);
+}
+
+.note {
+    font-size: 0.7rem;
+    font-style: italic;
+}
+
+    /* Table */
+table {
+    font-size: var(--font-medium);
+}
+
+.table-container {
+    overflow-x: scroll;
+    max-width: var(--max-width);
+}
+
+table td:nth-child(2),
+table td:nth-child(3),
+table td:nth-child(4),
+table td:nth-child(8),
+table td:nth-child(9)
+{
+  background: var(--primary-pale);
+}
+
+    /* freeze first column */
+table th:nth-child(1),
+table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index: 3;
+    border-right: 1px solid var(--trivial);
+    border-collapse: separate;
+    text-align: left;
+    min-width: 6rem;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+
+/* || View 2: Race Tracker */
+
+    /* Progress Bar */
 .myprogress {
     height: 1rem;
     background-color: var(--primary-pale);
@@ -139,13 +259,9 @@ main {
     width: 0;
     background-color: var(--primary);
     border-radius: var(--border-radius);
-  }
-
-.progress-time {
-    position: absolute;
-    right: 0;
 }
 
+    /* Metric Dashboard */
 .metrics {
     background-color: var(--metric-bg);
     padding: 0.85rem;
@@ -162,16 +278,7 @@ main {
 .metric {
     background: white;
     border-radius: var(--border-radius);
-    padding: 0.83rem;
-    transition: transform 0.2s;
-    /* display: flex;
-    flex-direction: column;
-    justify-content: space-between; */
-}
-
-.metric:active, button:active {
-    transform: scale(0.95);
-    touch-action: manipulation;
+    padding: var(--font-medium);
 }
 
 .metric-header {
@@ -181,45 +288,32 @@ main {
     margin-bottom: 0.5rem;
 }
 
-.metric-header i, .special {
+.metric-header i, 
+.special {
     font-size: 1.1rem;
 }
 
-.metric-name, .lastsplitEPH {
+.metric-name, 
+.lastsplitEPH {
     font-size: 0.65rem;
     color: var(--primary-grey);
-    /* font-family: monospace; */
     font-style: italic;
 }
 
-
 .metric-figure {
-    /* font-size: 1.5rem;
-    line-height: 1.5rem; */
     margin-top: 0.8rem;
-
     font-size: 1.6rem;
     line-height: 1.6rem;
-}
-
-
-.metric-figure {
     font-weight: 700;
 }
 
-#arrival-time{
-    color: var(--trivial);
-}
-
+    /* buffer */
 .buffer-gap {
     color: var(--secondary);
-    /* color: var(--primary); */
-}
-
-.metric > .buffer-gap {
     font-weight: 900;
 }
 
+    /* EPH comparison */
 .EPH-comparison {
     display: flex;
     align-items: center;
@@ -230,10 +324,10 @@ main {
     grid-template-columns: auto auto auto;
     gap: 0.3rem 0.5rem;
     font-size: 0.65rem;
-    /* font-family: monospace; */
     align-items: baseline;
 }
 
+    /* Checkpoint InfoBox */
 .checkpoints{
     display: flex;
     flex-direction: column;
@@ -242,26 +336,16 @@ main {
 .checkpoint {
     box-shadow: 0 2px 8px rgba(0,0,0,0.09);
     padding: 1rem;
-    transition: transform 0.2s;
     border-radius: var(--border-radius);
 }
 
 .last-cp {
-    transform: scale(0.88);
     margin-bottom: 0.5rem;
 }
 
 .next-cp {
     margin-bottom: 1.5rem;
 }
-
-.last-cp:active {
-    transform: scale(0.83);
-  }
-
-.next-cp:active {
-    transform: scale(0.95);
-  }
 
 .cp-header {
     width: 100%;
@@ -295,33 +379,32 @@ main {
     gap: 0.3rem;
 }
 
-.cp-header, .next-cp .cp-metric-figure {
-    font-weight: 600;
-}
-
-.buffer-gap {
-    font-weight: 700;
-}
-
-.next-cp .cp-header {
-    color: var(--primary-grey);
+.cp-metric-name {
+    color: var(--trivial);
+    font-size: 0.65rem;
 }
 
 .cp-info {
     font-size: 0.78rem;
 }
 
-.cp-metric-name {
-    color: var(--trivial);
-    font-size: 0.65rem;
-    padding: 0 1rem;
+.cp-header, 
+.next-cp .cp-metric-figure {
+    font-weight: 600;
+}
+
+.next-cp .cp-header {
+    color: var(--primary-grey);
+}
+
+    /* arrival */
+#arrival-time{
+    font-weight: 600;
 }
 
 #arrival-btn, .genreport-btn, #resetrace-btn {
     margin-top: 0.5rem;
     background-color: var(--primary);
-    border: none;
-    color: white;
     font-size: 1rem;
     font-weight: 900;
     border-radius: var(--border-radius);
@@ -330,108 +413,5 @@ main {
 }
 
 #resetrace-btn {
-    display: none;
     background-color: var(--secondary);
-}
-
-.cpinput {
-    background-color: var(--metric-bg);
-    padding: 1rem;
-    border-radius: var(--border-radius);
-    /* margin-bottom: 1rem; */
-}
-
-#form-addcp, #form-removecp, #form-reccesplit, #form-settarget {
-    /* min-height: 37vh; */
-    margin-bottom: 1rem;
-}
-
-.input-btn, .remove-btn {
-    border: none;
-    color: white;
-    font-size: 1rem;
-    font-weight: 900;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.09);
-    width: 100%;
-}
-
-.input-btn {
-    background-color: var(--primary);
-}
-
-.remove-btn {
-    background-color: var(--secondary);
-}
-
-label[for="race-start"] {
-    font-weight: 600;
-    margin-right: 1rem;
-}
-
-.input-btn i, .remove-btn i, #arrival-btn i{
-    color: white;
-}
-
-.form-menu {
-    display: grid;
-    grid-template-columns: 3fr 4fr;
-    gap: 0.8rem;
-}
-
-
-.form-menu-item {
-    color: var(--trivial);
-    font-size: 0.85rem;
-    line-height: 0.85rem;
-    text-align: left;
-    border: 1px solid var(--trivial);
-    border-radius: var(--border-radius);
-    padding: 0.5rem;
-    width: 100%;
-}
-
-.form-menu-item i {
-    color: var(--trivial);
-}
-
-.selected.form-menu-item {
-    color: var(--primary);
-    border-color: var(--primary);
-}
-
-.selected.form-menu-item i {
-    color: var(--primary);
-}
-
-.table-container {
-    overflow-x: scroll;
-    max-width: var(--max-width);
-}
-
-table td:nth-child(2),
-table td:nth-child(3),
-table td:nth-child(4),
-table td:nth-child(8),
-table td:nth-child(9)
-{
-  background: var(--primary-pale);
-}
-
-/* freeze first column */
-table th:nth-child(1),
-table td:nth-child(1) {
-    position: sticky;
-    left: 0;
-    background-color: white;
-    z-index: 3;
-    border-right: 1px solid var(--trivial);
-    border-collapse: separate;
-    text-align: left;
-    min-width: 6rem;
-}
-
-table {
-    border-collapse: separate;
-    border-spacing: 0;
 }
