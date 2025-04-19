@@ -20,7 +20,7 @@ export class RaceTime {
         return `${RaceTime.zeropad(hours)}:${RaceTime.zeropad(minutes)}`;
     }
 
-    static forward(timeStr, minsFoward){
+    static forward([timeStr, days], minsFoward){
         let [hours, minutes] = timeStr.split(':').map(Number);
 
         minutes += minsFoward; 
@@ -28,12 +28,10 @@ export class RaceTime {
         hours += Math.floor(minutes / 60); 
         minutes = Math.round(minutes % 60);
         // handle hour overflow of hours to days
-        const days = Math.floor(hours / 24);
+        days += Math.floor(hours / 24);
         hours = hours % 24;
 
-        return `${days ? "+"+days+"d " : ""}`
-            +`${RaceTime.zeropad(hours)}:`
-            +`${RaceTime.zeropad(minutes)}`;
+        return [`${RaceTime.zeropad(hours)}:${RaceTime.zeropad(minutes)}`, days];
     }
 
     static EPH(EP, mins){

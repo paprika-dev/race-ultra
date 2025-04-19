@@ -87,7 +87,9 @@ class RaceTracker {
                 `${displayFigure(race.checkpoints[i].EP, 1)} EP | 
                  ${displayFigure(race.checkpoints[i].dist, 1)} km | 
                  +${race.checkpoints[i].elev} m`
-            infoBoxLastCP.targetArrival.innerHTML = race.checkpoints[i].target.arrival || "--:--";
+
+            let a = race.checkpoints[i].target.arrival
+            infoBoxLastCP.targetArrival.innerHTML = (a[0] || "--:--") + (a[1] ? `<sup>${a[1]}</sup>` : "");
         }
 
         // next CP
@@ -99,7 +101,9 @@ class RaceTracker {
             `${displayFigure(race.checkpoints[i+1].EP, 1)} EP | 
              ${displayFigure(race.checkpoints[i+1].dist, 1)} km | 
              +${race.checkpoints[i+1].elev} m`
-             infoBoxNextCP.targetArrival.innerHTML = race.checkpoints[i+1].target.arrival || "--:--";
+
+            let a = race.checkpoints[i+1].target.arrival;
+            infoBoxNextCP.targetArrival.innerHTML = (a[0] || "--:--") + (a[1] ? ` <sup>+${a[1]}d</sup>` : "");
         }
     }
     

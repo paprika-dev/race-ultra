@@ -62,6 +62,11 @@ button i {
     color: var(--trivial);
 }
 
+sup {
+    font-size: 0.7rem;
+    color: var(--secondary);
+}
+
  /* || Show and Hide UI */
 .view, 
 .cpinput,

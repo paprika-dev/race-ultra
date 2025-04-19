@@ -6,7 +6,7 @@ import { race } from "../race/race.js";
 class RacePlan {
     // Race Start
     setRaceStart(){
-        race.checkpoints[0].target.arrival = racestartInput.value;
+        race.checkpoints[0].target.arrival = [racestartInput.value, 0];
         if (race.target.rt) { this.getTargetArrival() }
         race.saveCheckpoints();
     }
