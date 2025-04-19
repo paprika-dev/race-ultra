@@ -196,14 +196,14 @@ main {
     line-height: 1.5rem; */
     margin-top: 0.8rem;
 
-    font-size: 1.37rem;
-    line-height: 1.37rem;
+    font-size: 1.4rem;
+    line-height: 1.4rem;
 }
 
 
 .metric-figure, #arrival-time {
     font-weight: 600;
-    font-family: verdana;
+    font-family: 'Tahoma';
     color: #303D3A;
 }
 
