@@ -66,7 +66,7 @@ class Race {
 
         for (let i = 1; i < this.checkpoints.length; i++) {
             const cp = this.checkpoints[i]
-            cp.target = { effort: "", split: "", EPH: "" }
+            cp.target = { arrival: "", effort: "", split: "", EPH: "" }
         }
         this.saveCheckpoints();
     }  

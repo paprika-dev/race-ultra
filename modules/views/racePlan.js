@@ -7,7 +7,11 @@ class RacePlan {
     // Race Start
     setRaceStart(){
         race.checkpoints[0].target.arrival = racestartInput.value;
+        if (race.target.rt) { this.getTargetArrival() }
+        race.saveCheckpoints();
+    }
 
+    getTargetArrival() {
         for (let i = 1; i < race.checkpoints.length; i++){
             let cpA = race.checkpoints[i-1]
             let cpB = race.checkpoints[i]
@@ -17,8 +21,6 @@ class RacePlan {
                 cpB.target.split
             )
         }
-        
-        race.saveCheckpoints();
     }
 
     // Checkpoints
@@ -48,6 +50,9 @@ class RacePlan {
             cp.target.effort = cp.percentageEP;
         };
 
+        // check target arrival if race start time has been set
+        if (race.checkpoints[0].target.arrival) { this.getTargetArrival() };
+
         // save target and checkpoints
         race.saveTarget();
         race.saveCheckpoints();
@@ -72,6 +77,9 @@ class RacePlan {
             const checkpointK =  race.checkpoints[k]
             checkpointK.target.effort = checkpointK.target.split / race.target.rt
         }
+
+        // adjust target arrival if race start time has been set
+        if (race.checkpoints[0].target.arrival) { this.getTargetArrival() };
 
         // save target and checkpoints
         race.saveTarget();
@@ -115,6 +123,9 @@ class RacePlan {
 
     // Rendering
     updateInputSection() {
+        // race start input
+        racestartInput.value = race.checkpoints[0].target.arrival;
+
         // checkpoint input
         if (race.checkpoints.length == 0) {
             formAddCP.inputName.placeholder = "Starting Location";
