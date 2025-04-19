@@ -124,7 +124,7 @@ class RacePlan {
     // Rendering
     updateInputSection() {
         // race start input
-        racestartInput.value = race.checkpoints[0].target.arrival;
+        racestartInput.value = race.checkpoints[0]?.target.arrival;
 
         // checkpoint input
         if (race.checkpoints.length == 0) {
