@@ -1,9 +1,26 @@
-import { tb, formAddCP, formTargetRT, formTargetSplit, splitSelections } from "../utils/elements.js";
+import { tb, racestartInput, formAddCP, formTargetRT, formTargetSplit, splitSelections } from "../utils/elements.js";
 import { RaceTime } from "../utils/raceTime.js";
 import { displayFigure, displayEffort } from "../utils/displayFigure.js";
 import { race } from "../race/race.js";
 
 class RacePlan {
+    // Race Start
+    setRaceStart(){
+        race.checkpoints[0].target.arrival = racestartInput.value;
+
+        for (let i = 1; i < race.checkpoints.length; i++){
+            let cpA = race.checkpoints[i-1]
+            let cpB = race.checkpoints[i]
+            
+            cpB.target.arrival = RaceTime.forward(
+                cpA.target.arrival,
+                cpB.target.split
+            )
+        }
+        
+        race.saveCheckpoints();
+    }
+
     // Checkpoints
     addCheckpoint(checkpoint) {
         race.checkpoints.push(checkpoint);

@@ -2,6 +2,7 @@ import {
     
     navbtn,
     view,
+    racestartInput,
     formSelections,
     formAddCP, 
     formRemoveCP, 
@@ -34,7 +35,7 @@ window.onload = (e) => {
     if (checkpoints) { race.checkpoints = JSON.parse(checkpoints) };
     if (total) {race.total = JSON.parse(total) };
     if (target) {race.target = JSON.parse(target) };
-    if (recce) {race.target = JSON.parse(recce) };
+    if (recce) {race.recce = JSON.parse(recce) };
 
     racePlan.render();
     raceTracker.render();
@@ -72,6 +73,12 @@ formSelections[3].addEventListener('click', (e)=>{
 
 
 // input view
+
+/// set race start
+racestartInput.addEventListener('change',(e)=>{
+    racePlan.setRaceStart();
+    raceTracker.updateCheckpointInfoBox();
+})
 
 /// add CP
 formAddCP.form.addEventListener('submit', (e) => {

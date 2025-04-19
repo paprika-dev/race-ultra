@@ -13,6 +13,8 @@ export const navbtn = {
 };
 
 // plan view
+export const racestartInput = document.getElementById('race-start');
+
 export const forms = document.querySelectorAll('.cpinput');
 export const formSelections = document.querySelectorAll('.form-menu-item');
 
@@ -72,18 +74,26 @@ let [box1, box2] = checkpointInfoBoxes;
 
 export const infoBoxLastCP = {
     cpname: box1.querySelector('.cp-name'),
-    cpinfo: box1.querySelector('.cp-info')
+    cpinfo: box1.querySelector('.cp-info'),
+    targetArrival: box1.querySelectorAll('.cp-metric-figure')[0],
+    actualOrProjArrival: box1.querySelectorAll('.cp-metric-figure')[1],
+    buffer: box1.querySelectorAll('.cp-metric-figure')[2],
+    splitEPH: box1.querySelectorAll('.cp-metric-figure')[3]
 } 
 
 export const infoBoxNextCP = {
     cpname: box2.querySelector('.cp-name'),
-    cpinfo: box2.querySelector('.cp-info')
+    cpinfo: box2.querySelector('.cp-info'),
+    targetArrival: box2.querySelectorAll('.cp-metric-figure')[0],
+    actualOrProjArrival: box2.querySelectorAll('.cp-metric-figure')[1],
+    buffer: box2.querySelectorAll('.cp-metric-figure')[2],
+    splitEPH: box2.querySelectorAll('.cp-metric-figure')[3]
 } 
 
 export const arrival = {
     timeInput: document.getElementById('arrival-time'),
     btn:document.getElementById('arrival-btn')
-}
-export const resetraceBtn =  document.getElementById('resetrace-btn')
+};
+export const resetraceBtn =  document.getElementById('resetrace-btn');
 
 

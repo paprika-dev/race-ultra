@@ -61,17 +61,20 @@ class RaceTracker {
         // dashboard.pace = race.pace.plan;
     }
 
-    initializeInfoBox(box){
-        box.cpinfo.innerHTML = "EP | km | +m"
+    initializeInfoBox(box, cpname){
+        box.cpname.innerHTML = cpname;
+        box.cpinfo.innerHTML = "EP | km | +m";
+        box.targetArrival.innerHTML = "--:--";
+        box.actualOrProjArrival.innerHTML = "--:--";
+        box.buffer.innerHTML = "-";
+        box.splitEPH = "-";
     }
 
     updateCheckpointInfoBox() {
         // no CP input
         if (race.checkpoints.length == 0) {
-            infoBoxLastCP.cpname.innerHTML = "Last CP";
-            infoBoxNextCP.cpname.innerHTML = "Next CP";
-            this.initializeInfoBox(infoBoxLastCP);
-            this.initializeInfoBox(infoBoxNextCP);
+            this.initializeInfoBox(infoBoxLastCP, "Last CP");
+            this.initializeInfoBox(infoBoxNextCP, "Next CP");
             return
         }
 
@@ -84,12 +87,12 @@ class RaceTracker {
                 `${displayFigure(race.checkpoints[i].EP, 1)} EP | 
                  ${displayFigure(race.checkpoints[i].dist, 1)} km | 
                  +${race.checkpoints[i].elev} m`
+            // infoBoxLastCP.targetArrival.innerHTML = race.checkpoints[i].target.split;
         }
 
         // next CP
         if (race.actual.finished) {
-            infoBoxNextCP.cpname.innerHTML = "You have made it!"
-            this.initializeInfoBox(infoBoxNextCP);
+            this.initializeInfoBox(infoBoxNextCP, "You have made it!");
         } else if (race.checkpoints.length > 1) {
             infoBoxNextCP.cpname.innerHTML = race.prefixedName(i+1);
             infoBoxNextCP.cpinfo.innerHTML = 
